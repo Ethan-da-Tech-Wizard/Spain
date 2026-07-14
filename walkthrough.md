@@ -26,3 +26,6 @@ The layout design, system interface blueprints, and software specifications for 
 10. **BPH Speedometer**: Displays speed in blocks per hour (bph), calculated by scaling spatial velocity relative to the game's 20Hz tick rate.
 11. **Modulated Laser Hum**: Continuous mining laser outputs a pitch-modulated OpenAL sound loop (*"flurruruuurruuuuuururur"*).
 12. **Texture-Scrolling Weather Shaders**: Standard falling rain/snow is simulated using local box-meshes that scroll textures directly on the GPU, avoiding CPU particle overhead for older computers.
+13. **Togglable Camera Angles**: Switch seamlessly between 3rd Person Follow, Cockpit First-Person, Top-Down Landing, and Cinematic Orbit sweep cameras.
+14. **15 Lore Constellations**: The night sky is mapped with 15 pixelated constellations linked to deep planetary culture missions and lore logs.
+15. **Minecraft-Style Cracking**: Block surfaces render a 10-stage cracking texture overlay during laser mining operations.
