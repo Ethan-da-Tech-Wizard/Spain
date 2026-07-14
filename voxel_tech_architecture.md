@@ -1,0 +1,134 @@
+# Voxel Space Game: Technical Architecture (Java / LWJGL)
+
+This document outlines the software requirements, JVM libraries, and graphics math required to implement the voxel planetary mechanics, the "Origami Warp" landing transition, and hybrid rocket physics in Java.
+
+---
+
+## 🛠 1. Recommended Java Tech Stack
+
+To build a custom voxel engine with high performance and Minecraft-like aesthetics:
+
+| Component | Library / API | Purpose |
+| :--- | :--- | :--- |
+| **Runtime Environment** | **OpenJDK 21 (JVM)** | Modern garbage collectors (ZGC) for zero-latency chunk loading and memory recycling. |
+| **Windowing & Input** | **GLFW (via LWJGL 3)** | High-performance desktop window management, keyboard/mouse polling, and gamepad input support. |
+| **Graphics API** | **OpenGL 4.6 (Core Profile)** | Modern programmable pipeline for custom shaders (necessary for the planet warp effect). |
+| **Math Library** | **JOML (Java OpenGL Math Library)** | Fast 3D vector, matrix, and quaternion math, optimized for voxel operations. |
+| **Audio Engine** | **OpenAL (via LWJGL 3)** | Positional 3D audio for engines, mining lasers, and planetary wind. |
+| **Asset Loading** | **Lwjgl-stb** | Fast texture image parsing for pixel-art textures. |
+
+---
+
+## 🪐 2. The "Origami Warp" Landing Transition (Vertex Shader Math)
+
+To create the impressive transition where a cubical planet bends, unfolds, and flattens out beneath the player, we use a custom **GLSL Vertex Shader** during orbital descent.
+
+```
+                  [High Orbit: Cubical World]
+                           +-------+
+                          /       /|
+                         /       / |
+                        +-------+  |
+                        |       |  +
+                        |       | /
+                        +-------+
+                            |
+                            | [Descent Phase: GLSL Deformation]
+                            v
+                      \-----------/   <- Ground begins to fold open
+                       \         /
+                        \_______/
+                            |
+                            | [Ground Level: Fully Flattened Grid]
+                            v
+                  =========================
+```
+
+### The Math behind the Deformation Shader
+As the spacecraft descends from Orbit Altitude ($H_{orbit}$) to Ground Altitude ($H_{ground}$), we compute a interpolation factor $t \in [0, 1]$:
+$$t = \text{clamp}\left(\frac{\text{PlayerHeight} - H_{ground}}{H_{orbit} - H_{ground}}, 0, 1\right)$$
+
+In the vertex shader, each vertex's coordinate ($P_{cube}$) on the cube face is projected into a flat plane coordinate ($P_{flat}$):
+$$P_{final} = \text{lerp}(P_{flat}, P_{cube}, t)$$
+
+*   **When $t = 1$ (Space)**: The world is rendered as a clean rotating voxel cube.
+*   **When $0 < t < 1$ (Landing Transition)**: The edges of the cube bend backwards and flatten out, giving the visual illusion that the skybox and terrain are wrapping around the player.
+*   **When $t = 0$ (On the Ground)**: The world has fully flattened out into a standard flat voxel coordinate plane, eliminating coordinate conversion issues while walking.
+
+---
+
+## 📸 3. Camera Portal Lens (Voxel Edge Crossing)
+
+To make walking across the edges of the voxel cube look completely flat and seamless, we implement a **Dynamic View Matrix Offset** when a player approaches face boundaries:
+1.  **Face Projection**: The active face has a local orthogonal plane projection.
+2.  **Portal Warp Matrix**: When the player's bounding box is within 16 blocks of a cube edge, we compute a transformation matrix that projects the geometry of the adjacent cube face into the active viewport coordinates as if it lay on the same flat plane.
+3.  **Rotation Lerp**: As the player steps over the edge boundary, we apply a smooth camera quaternion rotation:
+    $$\text{CameraQuaternion} = \text{slerp}(\text{FaceA\_Orientation}, \text{FaceB\_Orientation}, \text{EdgeTransitionProgress})$$
+    The camera perspective rolls 90 degrees instantly, but the visual alignment is kept flush by warping the geometry vertices using the portal projection matrix.
+
+---
+
+## 🧭 4. Unified 3D Coordinate Grid & Color Codes
+
+In Java, we utilize **JOML (Java OpenGL Math Library)** vectors to handle coordinates. We maintain a unified $X, Y, Z$ grid across space and planetary dimensions:
+*   **Vector Class**: `org.joml.Vector3f` (floating-point for physics) and `org.joml.Vector3i` (integer block coordinates).
+*   **Color-Coded Rendering**: When coordinates are logged in the chat box or drawn on the HUD, they are parsed using ANSI/HTML style colors to align with our visual tokens:
+    *   **X (Red)**: `new Vector4f(1.0f, 0.2f, 0.2f, 1.0f)`
+    *   **Y (Green)**: `new Vector4f(0.2f, 1.0f, 0.2f, 1.0f)`
+    *   **Z (Blue)**: `new Vector4f(0.2f, 0.2f, 1.0f, 1.0f)`
+
+---
+
+## 🧬 5. Cloning & Ship Reconstruction Loop (Borderlands-Style)
+
+When the voxel ship collides with an asteroid, it splits blocks apart dynamically using standard voxel grid fracture formulas. If the reactor is destroyed, the ship explodes.
+
+### The Java State Machine for Respawning:
+
+```
+[Active Flight / Walking] 
+         │
+         v (Asteroid Collision / HP = 0)
+[Ship Explodes / Player Dies]
+         │
+         ▼ (Freeze Inputs, Trigger Glitch Fx)
+[Deconstitute Player Byte Array]
+         │
+         ▼ (Deduct Stardust Insurance fee)
+[Reconstruct at Nearest Cloning Pad]
+         │
+         ▼ (Bake Ship Mesh from Saved Blueprint)
+[Instantiate New Voxel Ship Entity]
+```
+
+*   **Template Persistence**: The player's customized ship layout is stored in RAM as a compressed byte array representing the original placed block grid.
+*   **Reconstitution**: On death, the engine instantiates a new player entity at the coordinates of the closest active outposts' Cloning Station, loads the ship template byte array, rebakes the greedy mesh, and places the player back in the cockpit.
+
+---
+
+## 🚀 6. Hybrid Voxel Rocket Mechanics
+
+Rockets are constructed on a local grid, but fly as single entities in space using rigid-body calculations.
+
+### Voxel Mesh Baking (Greedy Meshing)
+*   To prevent FPS drops, adjacent internal faces of placed blocks are culled.
+*   A "Greedy Meshing" algorithm combines adjacent flat faces of the same texture into larger single quadrilaterals, reducing the draw call vertex count by up to 90%.
+
+### Physics & Block Functionality
+1.  **Mass & Center of Gravity**: 
+    *   Every block placed adds to the total mass ($M$) of the ship.
+    *   The engine thrust force is applied at the position of the placed **Thruster Blocks**. If thrusters are unbalanced, it creates rotational torque, causing the ship to drift or spin.
+2.  **Special Functional Blocks**:
+    *   *Pilot Seat:* Defines the camera pivot and controls hub.
+    *   *Reactor Block:* Powers active components (Shields, Lasers).
+    *   *Cargo Chests:* Increases available inventory storage.
+    *   *Cosmetic Blocks (Colored Hull, Glass):* Adds mass but has no power draw or thrust value, letting players design any shape.
+
+---
+
+## 💾 4. Thread-Safe Chunk Pooling in Java
+
+Voxel terrain is split into $16 \times 16 \times 16$ voxel Chunks. To ensure smooth gameplay (no micro-stutters during landing transitions):
+*   **Asynchronous Loading**: Chunks are generated and meshed in a background Java Thread Pool (`ExecutorService`).
+*   **Direct ByteBuffers**: Mesh data is loaded directly into off-heap memory using LWJGL's `MemoryUtil` to avoid GC pauses.
+*   **Chunk Recycling**: Chunks that go out of render distance are placed in a pool to be reused, avoiding object allocation overhead.
