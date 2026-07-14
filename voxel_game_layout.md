@@ -103,4 +103,8 @@ graph TD
 To make orbital entry visually spectacular without overloading the Java engine:
 1.  **High Orbit (Cube View)**: From space, the planet is a visible 3D voxel cube rotating in the void.
 2.  **Origami Warp Portal Effect**: As the rocket approaches a target face for landing, the camera uses a vertex shader projection to warp the cube. The edges of the planet appear to peel back and flatten out.
-3.  **Flat Ground Landing**: When the transition ends, the local terrain is fully flattened into a standard infinite-style coordinate plane. The voxel rocket aligns as a static structure on a landing pad, letting the player disembark on foot to mine or build outposts.
+3.  **Voxel Landing Freedom**: Unlike standard landing systems, the player has full piloting freedom to touch down **anywhere** on the voxel grid:
+    *   *Surfaces:* You can land your rocket on the ground, on top of voxel tree branches, or on building rooftops. The rocket's landing gear snaps to the highest solid block.
+4.  **Landing HUD Feedbacks**:
+    *   *Speedometer:* Displays a digital value in **bph (Blocks Per Hour)** (e.g. `180,000 bph`).
+    *   *Mining Laser Audio:* Firing the continuous laser outputs a deep, mechanical warbling hum (*"flurruruuurruuuuuururur"*).

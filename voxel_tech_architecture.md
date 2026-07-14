@@ -118,24 +118,33 @@ Rockets are constructed on a local grid, but fly as single entities in space usi
 *   To prevent FPS drops, adjacent internal faces of placed blocks are culled.
 *   A "Greedy Meshing" algorithm combines adjacent flat faces of the same texture into larger single quadrilaterals, reducing the draw call vertex count by up to 90%.
 
-### Flight Physics & Control Bindings (Arrows + WASD)
+### Flight Physics, Control Bindings & Landing Mechanics
 We map GLFW keyboard polling directly to JOML forces and quaternions in our physics tick loop:
 1.  **Thrust Control (Up / Down Arrows)**:
     *   `Up Arrow`: Adds a forward force vector along the rocket's local direction vector:
         $$\vec{F}_{thrust} = \text{ForwardDirection} \times \text{EnginePower}$$
-    *   `Down Arrow`: Appliess a reverse force vector (deceleration / backup):
+    *   `Down Arrow`: Applies a reverse force vector (deceleration / backup):
         $$\vec{F}_{brake} = -\text{ForwardDirection} \times \text{EnginePower} \times 0.5$$
-2.  **Attitude & Direction Steering (W / S / A / D)**:
-    *   `W` / `S`: Controls Pitch (nose up/down) by rotating the ship's local X-axis.
-    *   `A` / `D`: Controls Roll (tilt left/right) and Yaw (turn left/right) by rotating the local Z and Y axes.
-    *   Rotations are accumulated in a quaternion: `org.joml.Quaternionf`.
+    *   `W / S / A / D`: Controls Pitch (nose up/down) and Yaw/Roll (tilt/turn left/right) using JOML quaternions.
+2.  **HUD Speedometer (BPH Conversion)**:
+    *   The engine calculates velocity in spatial blocks per tick ($v_{\text{blocks/tick}}$). To display this on the HUD in **Blocks Per Hour (bph)**, we multiply by the physics ticks per hour ($20 \text{ ticks/sec} \times 3600 \text{ sec/hour} = 72,000 \text{ ticks/hour}$):
+        $$\text{Velocity}_{\text{bph}} = v_{\text{blocks/tick}} \times 72,000$$
+3.  **Multi-Surface Landing Solver**:
+    *   To allow landing anywhere (ground, trees, building roofs), the engine casts a downward vector ray ($\vec{D} = [0, -1, 0]$) from the ship's center coordinates:
+        $$\text{LandingSurfaceHeight} = \text{GetHighestNonAirBlock}(X_{\text{ship}}, Z_{\text{ship}})$$
+    *   The landing gear boundaries dynamically snap to this height value, locking the ship's physics coordinates to the top surface of whatever block lies below it (e.g. leaves, stone bricks, or dirt).
 
-### Continuous Laser Mining Raycast (JOML Math)
+### Continuous Laser Mining Raycast & OpenAL Audio
 When holding left-click to fire the continuous mining laser:
 1.  **Ray Generation**: We cast a 3D ray starting at the player's camera position ($\vec{O}$) along the camera forward vector ($\vec{D}$):
     $$\vec{R}(d) = \vec{O} + d \times \vec{D}$$
 2.  **Voxel Intersection Check**: A fast voxel traversal algorithm checks intersected block coordinates along the ray up to a maximum distance of 30 blocks.
 3.  **Visual Laser Mesh**: If an intersection occurs, we calculate the distance ($d$) and render a glowing OpenGL cylindrical beam segment stretched from the player's weapon attachment coordinate to the target voxel intersection coordinate. We apply a ticking mining damage counter to the targeted block.
+4.  **OpenAL Audio Humming Loop ("flurruruuurruuuuuururur")**:
+    *   When the laser is active, we stream a looped 16-bit PCM mono wav buffer.
+    *   To achieve the mechanical warbling hum sound (*"flurruruuurruuuuuururur"*), we modulate the playback pitch multiplier ($P$) dynamically using a sine-wave function in the audio thread:
+        $$P = 1.0 + 0.15 \times \sin(\text{SystemTime} \times 40)$$
+        This creates a vibrating, resonant frequency effect in the speaker.
 
 ### Low-Performance Block Weather Shader
 To render rain/snow block effects efficiently without spawning millions of separate particle objects:
