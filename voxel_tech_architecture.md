@@ -44,15 +44,19 @@ To create the impressive transition where a cubical planet bends, unfolds, and f
                   =========================
 ```
 
-### The Math behind the Deformation Shader
+### The Math behind the Deformation Shader (Low-Tech Optimization)
+To run smoothly on low-end integrated graphics cards, we choose a **curved dome projection** for the warp. The math uses simple trigonometric sweeps, which require minimal GPU clock cycles:
+
 As the spacecraft descends from Orbit Altitude ($H_{orbit}$) to Ground Altitude ($H_{ground}$), we compute a interpolation factor $t \in [0, 1]$:
 $$t = \text{clamp}\left(\frac{\text{PlayerHeight} - H_{ground}}{H_{orbit} - H_{ground}}, 0, 1\right)$$
 
 In the vertex shader, each vertex's coordinate ($P_{cube}$) on the cube face is projected into a flat plane coordinate ($P_{flat}$):
 $$P_{final} = \text{lerp}(P_{flat}, P_{cube}, t)$$
 
+*   **Curvature Wave (Low-GPU Cost)**: We bend the horizon downwards by offsetting the vertical position ($P_{final}.y$) as a function of the vertex's horizontal distance from the player, multiplied by $t$:
+    $$P_{final}.y -= \sin(\text{Distance} \times 0.02) \times 12.0 \times t$$
 *   **When $t = 1$ (Space)**: The world is rendered as a clean rotating voxel cube.
-*   **When $0 < t < 1$ (Landing Transition)**: The edges of the cube bend backwards and flatten out, giving the visual illusion that the skybox and terrain are wrapping around the player.
+*   **When $0 < t < 1$ (Landing Transition)**: The terrain curves downward at the edges, giving the visual illusion that the cube is folding open like a dome under the ship while the player retains active flight steering.
 *   **When $t = 0$ (On the Ground)**: The world has fully flattened out into a standard flat voxel coordinate plane, eliminating coordinate conversion issues while walking.
 
 ---
@@ -126,9 +130,15 @@ Rockets are constructed on a local grid, but fly as single entities in space usi
 
 ---
 
-## 💾 4. Thread-Safe Chunk Pooling in Java
+## 💾 7. Thread-Safe Chunk Pooling & Low-Tech Optimizations
 
-Voxel terrain is split into $16 \times 16 \times 16$ voxel Chunks. To ensure smooth gameplay (no micro-stutters during landing transitions):
-*   **Asynchronous Loading**: Chunks are generated and meshed in a background Java Thread Pool (`ExecutorService`).
-*   **Direct ByteBuffers**: Mesh data is loaded directly into off-heap memory using LWJGL's `MemoryUtil` to avoid GC pauses.
-*   **Chunk Recycling**: Chunks that go out of render distance are placed in a pool to be reused, avoiding object allocation overhead.
+Voxel terrain is split into $16 \times 16 \times 16$ voxel Chunks. To ensure the game runs smoothly on low-tech systems (like older laptops or school computers) without micro-stutters:
+
+### 1. Hard-Capped Rendering Boundaries
+*   **8-Chunk Render Distance**: The maximum chunk render distance is capped at 8 chunks (128 blocks sphere). This reduces total active chunks to a fraction of modern render loads, ensuring high FPS on integrated graphics.
+*   **Face Culling**: When the player lands and walk-mode is active on a specific cube face, the other 5 faces of the planet are completely unloaded from CPU and GPU memory. This keeps RAM usage under $250\text{MB}$ at all times.
+
+### 2. Zero-Garbage Memory Management
+*   **Asynchronous Loading**: Chunk meshing runs in a background pool (`ExecutorService` with 2 threads max to prevent CPU throttling on dual-core processors).
+*   **Off-Heap ByteBuffers**: Direct memory allocations via LWJGL's `MemoryUtil` bypass the JVM Garbage Collector.
+*   **Chunk Recycling**: Instead of destroying chunk objects and allocating new ones, out-of-range chunks are placed in a pool and rewritten in place, eliminating GC pauses.
