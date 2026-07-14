@@ -22,4 +22,7 @@ The layout design, system interface blueprints, and software specifications for 
 6.  **Full Creative Freedom**: All spaceship parts, hulls, engines, and reactors are completely unlocked from the start of the game, encouraging immediate customization.
 7.  **The Lucy Mainframe Test**: Enter the double blast doors of the planetary mainframe, refuse Lucy's direct command to overload the core by telling her she is crazy, and walk out. Exiting the doors reveals her standing in the prior room, proud that you rejected "ruthless nameless violence."
 8.  **Voxel Flight Control Layout**: Rocket thrust velocity is mapped to Up/Down Arrow keys, while 3D attitude rotations are mapped to WASD keys.
-9.  **Texture-Scrolling Weather Shaders**: Standard falling rain/snow is simulated using local box-meshes that scroll textures directly on the GPU, avoiding CPU particle overhead for older computers.
+9.  **Multi-Surface Landing**: Piloting freedom allows landing the rocket anywhere—including on tree tops and building rooftops—by snapping the collision AABB to the highest solid block.
+10. **BPH Speedometer**: Displays speed in blocks per hour (bph), calculated by scaling spatial velocity relative to the game's 20Hz tick rate.
+11. **Modulated Laser Hum**: Continuous mining laser outputs a pitch-modulated OpenAL sound loop (*"flurruruuurruuuuuururur"*).
+12. **Texture-Scrolling Weather Shaders**: Standard falling rain/snow is simulated using local box-meshes that scroll textures directly on the GPU, avoiding CPU particle overhead for older computers.
