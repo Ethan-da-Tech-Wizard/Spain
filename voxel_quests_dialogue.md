@@ -129,7 +129,7 @@ Lucy is a central narrative guide designed with an *Angel (Borderlands)* and *Co
 
 ---
 
-## 🎨 5. Generous Rocket Constructor System
+## 🛠 5. Generous Rocket Constructor System
 
 To ensure creativity is never restricted, all spaceship parts and block components are available to the player from the start:
 *   **Zero Gatekeeping**: Every thruster, warp drive, shield generator, reactor, and decorative alloy block is fully unlocked in the inventory palette.
@@ -137,7 +137,24 @@ To ensure creativity is never restricted, all spaceship parts and block componen
 
 ---
 
-## 🎭 4. Beautiful Animated Voxel Graphics (Visual Feel)
+## 🌟 6. Constellation Lore & Planetary Alignments
+
+The galaxy’s night sky contains **15 main constellations** formed by bright block stars. These constellations possess deep lore, and entire planets align their society, architecture, and quests with them.
+
+### Key Constellations Examples:
+1.  **The Cosmic Anvil (Crafting & Industry)**:
+    *   *Lore:* Represents the blacksmith of the universe who forged the original star metal blocks.
+    *   *Planetary Alignment:* Planet *Forge-3* is completely dedicated to this constellation. Its inhabitants build massive block temples reflecting its shape and offer quests to construct outposts in its honor.
+2.  **The Star-Phoenix (Rebirth & Peace)**:
+    *   *Lore:* The celestial protector representing the cloning technology that keeps the galaxy safe from death.
+    *   *Planetary Alignment:* Planet *Gaea Nova* features sky portals built to align with this constellation during the autumn equinox, triggering special dialogue choices with the elders.
+3.  **The Void Kraken (Mystery & Unstable Warp)**:
+    *   *Lore:* Represents the dangers of black holes and the chaos of deep space.
+    *   *Planetary Alignment:* Outlaws in the Void Syndicate paint this constellation onto their ship hulls. Interrogating Syndicate leaders about it unlocks coordinates to hidden wormholes.
+
+---
+
+## 🎭 7. Beautiful Animated Voxel Graphics (Visual Feel)
 
 While graphics are kept retro and pixelated, the world should feel organic, alive, and beautifully lit:
 
