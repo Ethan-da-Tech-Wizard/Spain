@@ -80,14 +80,21 @@ graph TD
 *   **Dynamic Face-Gravity Vector**: The gravity vector pulls straight down relative to the planet face the player is currently standing on.
 *   **Edge Traversals (Camera Portals)**: You can walk directly to the edge of the flat face. As you cross the edge boundary, the camera acts like a portal lens—warping coordinates seamlessly to make the adjacent face unfold and appear completely flat under your feet.
 
-### 2. Space Flight Dimension
-*   Space is a void dimension.
-*   Rockets are represented as moving voxel entities (a grouped collection of blocks).
+### 2. Space Flight Dimension & Controls
+*   Space is a void dimension where rockets fly as moving voxel entities.
+*   **Rocket Piloting Controls**:
+    *   `Up Arrow`: Thrust forward (speed up).
+    *   `Down Arrow`: Brake / Reverse thrust (slow down / backup).
+    *   `W / S / A / D`: Pitch up, pitch down, roll left, roll right (3D directional rotation steering).
 *   **Damage & Destruction**: Crashing into voxel asteroids or hostile lasers can completely blow your ship up, breaking blocks apart dynamically.
 *   **Cloning Reconstitution Loop (Borderlands-Style)**: To prevent punishing players, death and ship destruction are handled by advanced cloning tech. If your ship explodes, a reconstruction beam recreates your cloned body and customized spacecraft template at the nearest planetary spaceport or orbital hangar instantly.
 
 ### 3. Unified 3D Coordinate Grid
 *   Both space flight and ground coordinates use a single, unified 3D vector map. Instead of switching coordinate systems between space and planet faces, a global $X, Y, Z$ grid translates seamlessly.
+
+### 4. Low-Performance Block Weather Layout
+*   Planets support retro Minecraft-style weather effects (falling block rains, pixel dust storms) designed for low-performance systems.
+*   The weather is represented by columns of simple semi-transparent block texture meshes parented to the player's bounding box, shifting dynamically to avoid rendering millions of particles.
 
 ---
 

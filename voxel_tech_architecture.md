@@ -118,15 +118,32 @@ Rockets are constructed on a local grid, but fly as single entities in space usi
 *   To prevent FPS drops, adjacent internal faces of placed blocks are culled.
 *   A "Greedy Meshing" algorithm combines adjacent flat faces of the same texture into larger single quadrilaterals, reducing the draw call vertex count by up to 90%.
 
-### Physics & Block Functionality
-1.  **Mass & Center of Gravity**: 
-    *   Every block placed adds to the total mass ($M$) of the ship.
-    *   The engine thrust force is applied at the position of the placed **Thruster Blocks**. If thrusters are unbalanced, it creates rotational torque, causing the ship to drift or spin.
-2.  **Special Functional Blocks**:
-    *   *Pilot Seat:* Defines the camera pivot and controls hub.
-    *   *Reactor Block:* Powers active components (Shields, Lasers).
-    *   *Cargo Chests:* Increases available inventory storage.
-    *   *Cosmetic Blocks (Colored Hull, Glass):* Adds mass but has no power draw or thrust value, letting players design any shape.
+### Flight Physics & Control Bindings (Arrows + WASD)
+We map GLFW keyboard polling directly to JOML forces and quaternions in our physics tick loop:
+1.  **Thrust Control (Up / Down Arrows)**:
+    *   `Up Arrow`: Adds a forward force vector along the rocket's local direction vector:
+        $$\vec{F}_{thrust} = \text{ForwardDirection} \times \text{EnginePower}$$
+    *   `Down Arrow`: Appliess a reverse force vector (deceleration / backup):
+        $$\vec{F}_{brake} = -\text{ForwardDirection} \times \text{EnginePower} \times 0.5$$
+2.  **Attitude & Direction Steering (W / S / A / D)**:
+    *   `W` / `S`: Controls Pitch (nose up/down) by rotating the ship's local X-axis.
+    *   `A` / `D`: Controls Roll (tilt left/right) and Yaw (turn left/right) by rotating the local Z and Y axes.
+    *   Rotations are accumulated in a quaternion: `org.joml.Quaternionf`.
+
+### Continuous Laser Mining Raycast (JOML Math)
+When holding left-click to fire the continuous mining laser:
+1.  **Ray Generation**: We cast a 3D ray starting at the player's camera position ($\vec{O}$) along the camera forward vector ($\vec{D}$):
+    $$\vec{R}(d) = \vec{O} + d \times \vec{D}$$
+2.  **Voxel Intersection Check**: A fast voxel traversal algorithm checks intersected block coordinates along the ray up to a maximum distance of 30 blocks.
+3.  **Visual Laser Mesh**: If an intersection occurs, we calculate the distance ($d$) and render a glowing OpenGL cylindrical beam segment stretched from the player's weapon attachment coordinate to the target voxel intersection coordinate. We apply a ticking mining damage counter to the targeted block.
+
+### Low-Performance Block Weather Shader
+To render rain/snow block effects efficiently without spawning millions of separate particle objects:
+1.  **Particle Grid Columns**: We pre-allocate a tiny grid (e.g. $4 \times 4$ columns) of tall rain-textured block meshes.
+2.  **Offset Lock**: This weather mesh grid is parented to the player's current $X, Z$ coordinates so that rain only renders in the player's immediate field of view.
+3.  **OpenGL Texture Scrolling**: Instead of moving individual drop vertices on the CPU, the vertex shader scrolls the texture coordinates ($V$) vertically over time inside GPU memory:
+    $$V_{new} = V_{old} + (\text{SystemTime} \times \text{FallSpeed})$$
+    This gives the perfect visual effect of falling voxel rain while consuming virtually zero CPU/GPU overhead.
 
 ---
 
