@@ -6,9 +6,9 @@ The layout design, system interface blueprints, and software specifications for 
 
 ## 📂 Design Files Created (Artifacts)
 *   [voxel_game_layout.md](file:///Users/mirandazavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_game_layout.md) — User interface rules, color-coded unified 3D coordinates ($X, Y, Z$ vectors), flat cubical gravity mechanics, and Borderlands-style cloning respawn.
-*   [voxel_tech_architecture.md](file:///Users/mirandazavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_tech_architecture.md) — Software requirements (LWJGL 3, JOML, OpenJDK 21), vertex shader formulas for the "Origami Warp" folding transition, camera portal view matrix offsets, and greedy meshing algorithms.
-*   [voxel_save_format.md](file:///Users/mirandazavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_save_format.md) — Voxel serialization schemas using compressed Run-Length Encoding (RLE) streams and Named Binary Tag (NBT) compound structures.
-*   [voxel_quests_dialogue.md](file:///Users/mirandazavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_quests_dialogue.md) — Morrowind-style interactive keyword dialogue frames, RuneScape animated NPC avatars, Oblivion-style guild hierarchies, Void end-game loops, the **Sabotage & Rehabilitation** final boss, the **Lucy AI guide character arc (with in-depth script dialogue)**, and fully unlocked spaceship component builders.
+*   [voxel_tech_architecture.md](file:///Users/mirandavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_tech_architecture.md) — Software requirements (LWJGL 3, JOML, OpenJDK 21), vertex shader formulas for the "Origami Warp" folding transition, camera portal view matrix offsets, and greedy meshing algorithms.
+*   [voxel_save_format.md](file:///Users/mirandavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_save_format.md) — Voxel serialization schemas using compressed Run-Length Encoding (RLE) streams and Named Binary Tag (NBT) compound structures.
+*   [voxel_quests_dialogue.md](file:///Users/mirandavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_quests_dialogue.md) — Morrowind-style interactive keyword dialogue frames, RuneScape animated NPC avatars, Oblivion-style guild hierarchies, Void end-game loops, the **Sabotage & Rehabilitation** final boss, the **Lucy AI guide character arc (with in-depth script dialogue)**, and fully unlocked spaceship component builders.
 
 ---
 
@@ -26,3 +26,6 @@ The layout design, system interface blueprints, and software specifications for 
 10. **BPH Speedometer**: Displays speed in blocks per hour (bph), calculated by scaling spatial velocity relative to the game's 20Hz tick rate.
 11. **Modulated Laser Hum**: Continuous mining laser outputs a pitch-modulated OpenAL sound loop (*"flurruruuurruuuuuururur"*).
 12. **Texture-Scrolling Weather Shaders**: Standard falling rain/snow is simulated using local box-meshes that scroll textures directly on the GPU, avoiding CPU particle overhead for older computers.
+13. **Togglable Camera Angles**: Switch seamlessly between 3rd Person Follow, Cockpit First-Person, Top-Down Landing, and Cinematic Orbit sweep cameras.
+14. **15 Lore Constellations**: The night sky is mapped with 15 pixelated constellations linked to deep planetary culture missions and lore logs.
+15. **Minecraft-Style Cracking**: Block surfaces render a 10-stage cracking texture overlay during laser mining operations.
