@@ -21,3 +21,5 @@ The layout design, system interface blueprints, and software specifications for 
 5.  **Sabotage & Rehabilitation Boss Loop**: Disable the boss's power stations and redirect their supply cargo to drain their shields. Once defenseless, board their ship and use historical lore logs to rehabilitate them instead of executing them.
 6.  **Full Creative Freedom**: All spaceship parts, hulls, engines, and reactors are completely unlocked from the start of the game, encouraging immediate customization.
 7.  **The Lucy Mainframe Test**: Enter the double blast doors of the planetary mainframe, refuse Lucy's direct command to overload the core by telling her she is crazy, and walk out. Exiting the doors reveals her standing in the prior room, proud that you rejected "ruthless nameless violence."
+8.  **Voxel Flight Control Layout**: Rocket thrust velocity is mapped to Up/Down Arrow keys, while 3D attitude rotations are mapped to WASD keys.
+9.  **Texture-Scrolling Weather Shaders**: Standard falling rain/snow is simulated using local box-meshes that scroll textures directly on the GPU, avoiding CPU particle overhead for older computers.
