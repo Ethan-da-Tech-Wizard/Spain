@@ -23,6 +23,13 @@ The save directory structure for a player's galaxy profile:
   ├── player.dat          <- Player position, inventory, locked coordinates (Binary)
   ├── spaceship.dat       <- Voxel rocket layout, custom blocks, components (Binary)
   ├── galaxy.dat          <- List of discovered systems and custom placed planets (JSON)
+  ├── narrative.dat       <- Quest ledger, known dialogue keywords, faction reputation (Binary/NBT)
+  ├── restore.dat         <- Last safe save, New-U respawn anchors, restoration template index
+  ├── autosaves/
+  │    ├── landing.slot
+  │    ├── launch.slot
+  │    ├── room_transition.slot
+  │    └── quest_checkpoint.slot
   └── planets/
        ├── [planet_id]_face0.chunk  <- Compressed voxel chunks for Face 0 (North)
        ├── [planet_id]_face1.chunk  <- Compressed voxel chunks for Face 1 (South)
@@ -90,3 +97,144 @@ CompoundTag("Spaceship") {
 }
 ```
 *   **Java Implementation**: Custom `DataInputStream` and `DataOutputStream` handlers parse these tags directly into JVM records, minimizing garbage collector allocations during ship dry-docking.
+
+---
+
+## 🧭 5. Narrative, Reputation & Dialogue Persistence (`narrative.dat`)
+
+The narrative save file stores the RPG state that should survive death, ship destruction, and world restoration. This includes quest progress, known dialogue keywords, faction reputation, Lucy trust, and whether faction-impacting actions were witnessed.
+
+### Narrative File Structure
+Use the same NBT-style compound approach as `spaceship.dat`:
+
+```
+CompoundTag("Narrative") {
+    ListTag("KnownKeywords") {
+        StringTag("Keyword"): "Planetary Mainframe"
+        StringTag("Keyword"): "Glow Crystals"
+        StringTag("Keyword"): "Void Syndicate"
+    }
+
+    ListTag("JournalEntries") {
+        CompoundTag() {
+            StringTag("QuestId"): "lucy_mainframe_test"
+            StringTag("SpeakerId"): "lucy"
+            StringTag("LocationId"): "astraea4_mainframe_anteroom"
+            StringTag("Text"): "Lucy ordered the player to overload the Planetary Mainframe."
+            IntTag("Phase"): 3
+        }
+    }
+
+    CompoundTag("FactionReputation") {
+        IntTag("SolarSentinels"): 25
+        IntTag("VoidSyndicate"): 10
+        IntTag("AetherScavengers"): 18
+        StringTag("SolarSentinelsRank"): "Useful"
+        StringTag("VoidSyndicateRank"): "Unknown"
+        StringTag("AetherScavengersRank"): "Useful"
+    }
+
+    ListTag("FactionRelationships") {
+        CompoundTag() {
+            StringTag("FactionA"): "SolarSentinels"
+            StringTag("FactionB"): "VoidSyndicate"
+            StringTag("RelationshipState"): "Hostile"
+            IntTag("UnityProgress"): 12
+        },
+        CompoundTag() {
+            StringTag("FactionA"): "VoidSyndicate"
+            StringTag("FactionB"): "AetherScavengers"
+            StringTag("RelationshipState"): "SecretlyCooperative"
+            IntTag("UnityProgress"): 34
+        }
+    }
+
+    CompoundTag("LucyState") {
+        IntTag("Trust"): 42
+        IntTag("Concern"): 7
+        IntTag("HumorAffinity"): 15
+        StringTag("MoralityCommentaryMode"): "reactive_only"
+        BooleanTag("MainframeTestResolved"): false
+    }
+}
+```
+
+### Reputation Event Records
+Reputation should not change because of invisible karma. Store reputation events with evidence context so quests can decide who knows what.
+
+```
+CompoundTag("ReputationEvent") {
+    StringTag("EventId"): "destroyed_sentinel_depot_001"
+    StringTag("LocationId"): "cinder_moon_depot"
+    BooleanTag("Witnessed"): false
+    BooleanTag("ScanEvidenceSurvived"): true
+    BooleanTag("PlayerApologized"): false
+    StringTag("PrimaryFactionAffected"): "SolarSentinels"
+    IntTag("ReputationDeltaIfDiscovered"): -20
+}
+```
+
+*   **Immediate Rep Change**: Apply only when witnessed, reported, scanned, confessed, or part of a public quest outcome.
+*   **Delayed Rep Change**: Hidden actions can become known later if evidence survives or an NPC discovers the scene.
+*   **Lucy Commentary**: Lucy can react immediately even when factions do not know, because her state is local to the player companion system. These reactions are emotional and atmospheric only; they should not unlock exclusive quests or block quest access.
+*   **Apology State**: Store whether the player apologized for public destruction or betrayal. Apologies can soften dialogue and help repair trust, but they do not erase NPC memory.
+*   **Rank Labels**: Store both raw reputation and rank labels (`Unknown`, `Useful`, `Trusted`, `Champion`, `Unifier`) so UI and dialogue can quickly branch.
+*   **Faction Pair State**: Store relationship states between factions because some hate each other, some secretly cooperate, and some unexpectedly align before the larger unity arc is complete.
+
+---
+
+## 🧬 6. New-U Respawn, Autosave & Restoration Persistence (`restore.dat`)
+
+Death should restore the player from the last safe save without meaningful loss. Destroyed ships, killed NPCs, cities, and planets can be rebuilt from templates when the game rules allow it.
+
+### Restore File Structure
+```
+CompoundTag("Restore") {
+    StringTag("LastSafeSlot"): "autosaves/room_transition.slot"
+    StringTag("LastRespawnAnchorId"): "newu_astraea4_orbital_hangar"
+    LongTag("LastAutosaveTimeUtc"): 1784041812000
+
+    ListTag("RestoreTemplates") {
+        CompoundTag() {
+            StringTag("TemplateId"): "astraea4_pre_mainframe_city"
+            StringTag("Scope"): "planet"
+            StringTag("PlanetId"): "astraea4"
+            StringTag("CityState"): "finished_stable"
+            BooleanTag("CanSaveWhileDestroyed"): false
+            BooleanTag("NpcMemoryPersists"): true
+            BooleanTag("PlayerCanRestoreAtWill"): true
+        },
+        CompoundTag() {
+            StringTag("TemplateId"): "player_ship_latest"
+            StringTag("Scope"): "ship"
+            BooleanTag("PlayerCanRestoreAtWill"): true
+        }
+    }
+}
+```
+
+### Autosave Slots
+Autosaves are small restore anchors, not full punishment checkpoints. They should fire at predictable RPG-style boundaries:
+
+| Slot | Trigger | Purpose |
+| :--- | :--- | :--- |
+| `landing.slot` | Landing on a planet | Safe return before surface exploration. |
+| `launch.slot` | Initial launch from a planet/station | Safe return before flight hazards. |
+| `room_transition.slot` | Entering/exiting a loading-screen room | Safe return near dungeon/facility progress. |
+| `quest_checkpoint.slot` | Quest phase completion or major dialogue start | Protects narrative progress. |
+| `puzzle_checkpoint.slot` | Puzzle room stage reached | Lets Lucy help without forcing full restarts. |
+
+### Respawn Rules
+*   Reload the latest safe slot when the player dies.
+*   Rebuild the player at the nearest valid New-U station, orbital hangar, room entrance, or faction medical bay.
+*   Restore the latest ship template if the ship was destroyed.
+*   Preserve inventory, known keywords, quest flags, completed phases, and faction reputation.
+*   Allow NPCs to remember death/restoration events and react with anger, fear, sarcasm, or distrust, but do not remove cargo, reset major progress, or lock the player out of content.
+
+### World Restoration Rules
+*   Cities, planets, and NPC populations can have named restoration templates.
+*   A restored location returns to the selected template's block layout, NPC roster, city state, and local quest availability.
+*   City clone saves only capture finished, stable city states. The game should not save a new city template while the city is being destroyed, burning, evacuating, collapsing, or under active disaster conditions.
+*   NPCs may remember the destruction/restoration as a strange clone-era event. A restored shopkeeper can be mad about being blown up, a mayor can demand an apology, and a guard can become jumpy around the player.
+*   The journal should record that restoration happened, but factions only react if the destruction/restoration was witnessed, reported, or publicly visible.
+*   Lucy may comment on restored worlds as a philosophical or funny continuity beat.
