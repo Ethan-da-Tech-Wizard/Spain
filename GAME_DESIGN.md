@@ -17,10 +17,26 @@ The player should always feel like they have power over their world. The game ca
 
 ## Technical Direction
 
-- Engine: Unity.
-- Language: C#.
-- Target platforms: Android tablets/phones, iPhone/iPad, Windows, macOS, and Linux.
-- Style: 3D, stylized, colorful, readable on small screens.
+Updated October 9, 2026: Spain runs inside real **Minecraft Java Edition 26.3**.
+Minecraft provides rendering, movement, block building, inventory, NPC bodies and world saves.
+The current prototype combines an adventure data pack with a Fabric mod for player-built rockets and flight.
+
+- Engine: Minecraft Java Edition.
+- Content: Minecraft data packs; Java/Fabric for mechanics that need code.
+- Initial platforms: Linux, Windows and macOS with Minecraft Java Edition.
+- Style: Minecraft blocks, spaceport cities and distinct planetary biomes.
+- NPCs: right-click conversations, travel choices, city guidance and persistent quests.
+- Local assets: voxelized Spore hulls, engines and creatures plus Melty props; SkyCraft supplies a reference for Minecraft integration.
+
+See [README.md](README.md) for the playable milestone. Older planet-editor, Unity, browser and custom-engine ideas below remain design references, not claims about implemented features.
+
+## Current Test and Long-Term Story
+
+Start on a large Minecraft Earth, explore a populated city, meet a rocket scientist, and create a ship. The scientist offers help but never gates the player's freedom: the creator, boarding, landing, recall and quick travel work independently. Free flight crosses the gravity boundary into orbit. A populated station welcomes the player to the world of endless possibility and completes this test.
+
+The full story will center on rich, humorous relationships and ending wars through friendship. Combat, killing and resource gathering remain possible. At the true ending, the player's companions stop a major invasion through negotiation, love, fulfilled promises and a shared future.
+
+Ordinary Minecraft people/mobs coexist with alien appearances adapted from Spore. Default/custom Minecraft skins, imported creature appearances and player-created block creatures share the same visual palette. Species and technological advancement never determine morality. Creature populations begin as babies and can develop into tribes, cities and space civilizations when maturity, habitat, cooperation and knowledge meet stable stage gates. The tested algorithm is currently a prototype outside the running world simulation.
 
 ## Player Fantasy
 

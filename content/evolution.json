@@ -1,0 +1,14 @@
+{
+  "stages": ["creature", "tribe", "city", "space"],
+  "initial_life_stage": "baby",
+  "simulation_step_game_days": 1,
+  "world_progress_policy": "Simulate loaded and visited populations; summarize elapsed game days on return. Do not advance from real-world AFK time.",
+  "gates": [
+    {"stage":"tribe","maturity":0.65,"habitat":0.55,"cooperation":0.60,"knowledge":0.20,"stable_steps":3},
+    {"stage":"city","maturity":0.85,"habitat":0.65,"cooperation":0.70,"knowledge":0.55,"stable_steps":5},
+    {"stage":"space","maturity":0.95,"habitat":0.75,"cooperation":0.80,"knowledge":0.90,"stable_steps":8}
+  ],
+  "temperament": "Friendly, indifferent and hostile are individual dispositions. Culture, species and technology do not determine morality.",
+  "friendship_inputs": ["shared food", "habitat restoration", "mutual aid", "cross-faction quests", "listening", "keeping promises"],
+  "invasion_resolution": "Trusted allies, shared evidence, fulfilled promises and consent unlock a negotiated coalition. Combat is possible but never required to earn the final diplomatic ending."
+}

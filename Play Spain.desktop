@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=Play Spain
+Comment=Create a rocket and explore Earth, space and Starforge Station
+Exec=/home/ethan/pg/wyldgms/spain/play-spain.sh
+Path=/home/ethan/pg/wyldgms/spain
+Icon=applications-games
+Terminal=false
+Categories=Game;

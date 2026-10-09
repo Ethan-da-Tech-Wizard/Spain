@@ -1,0 +1,184 @@
+[
+  {
+    "id": "navigator",
+    "name": "Captain Marra",
+    "role": "Navigator",
+    "dimension": "orbit",
+    "position": [
+      -5.5,
+      65,
+      0.5
+    ],
+    "profession": "cartographer",
+    "dialogue": "Welcome to Starforge Station. Pick a destination and I will arrange passage.",
+    "action": "travel"
+  },
+  {
+    "id": "lucy",
+    "name": "Lucy",
+    "role": "Guide",
+    "dimension": "orbit",
+    "position": [
+      5.5,
+      65,
+      0.5
+    ],
+    "profession": "librarian",
+    "dialogue": "Three worlds, one shared sky. Talk to Iona in Mosslight; her observatory needs a crystal from Cinder-7.",
+    "action": "guide"
+  },
+  {
+    "id": "iona",
+    "name": "Iona",
+    "role": "Observatory keeper",
+    "dimension": "astraea",
+    "position": [
+      -10.5,
+      65,
+      -10.5
+    ],
+    "profession": "librarian",
+    "dialogue": "Our observatory can connect the colonies. Can you bring one amethyst shard from Cinder-7? Ask Sera near the landing pad.",
+    "action": "quest"
+  },
+  {
+    "id": "sera",
+    "name": "Sera",
+    "role": "Crystal prospector",
+    "dimension": "cinder",
+    "position": [
+      -10.5,
+      65,
+      -10.5
+    ],
+    "profession": "toolsmith",
+    "dialogue": "Iona sent you? Take a crystal from our survey. The colonies should share what they discover.",
+    "action": "crystal"
+  },
+  {
+    "id": "arlen",
+    "name": "Arlen",
+    "role": "City steward",
+    "dimension": "borealis",
+    "position": [
+      -10.5,
+      65,
+      -10.5
+    ],
+    "profession": "mason",
+    "dialogue": "Aurora Reach is yours to explore and build in. The landing pad always leads back to Starforge Station.",
+    "action": "resident"
+  },
+  {
+    "id": "mayor",
+    "name": "Mira",
+    "role": "Harborlight mayor",
+    "dimension": "earth",
+    "position": [
+      -5.5,
+      97,
+      0.5
+    ],
+    "profession": "librarian",
+    "dialogue": "Welcome to Harborlight! Our biggest export is awkward introductions. Dr Pip at the east workshop has a rocket for you. Go meet the universe; bring back friends, not a conquest.",
+    "action": "launch_guide"
+  },
+  {
+    "id": "scientist",
+    "name": "Dr Pip",
+    "role": "Rocket scientist",
+    "dimension": "earth",
+    "position": [
+      7.5,
+      97,
+      -5.5
+    ],
+    "profession": "toolsmith",
+    "dialogue": "Rocket science is mostly making sure the pointy bit has ambition. I have a starter hull and a spacesuit for you. Build on the east pad, capture your design, then fly above Y 280 into space. No part budget. Your ship cannot be damaged.",
+    "action": "scientist"
+  },
+  {
+    "id": "gardener",
+    "name": "Fern",
+    "role": "City gardener",
+    "dimension": "earth",
+    "position": [
+      -10.5,
+      97,
+      -10.5
+    ],
+    "profession": "farmer",
+    "dialogue": "The trees are excellent listeners. Also acceptable landing pads. Please avoid the one I just watered.",
+    "action": "resident"
+  },
+  {
+    "id": "chef",
+    "name": "Toast",
+    "role": "Space sandwich chef",
+    "dimension": "earth",
+    "position": [
+      15.5,
+      97,
+      15.5
+    ],
+    "profession": "butcher",
+    "dialogue": "One day I will end a war with soup. Until then: packed lunches, friendship, and no eating your rocket parts.",
+    "action": "resident"
+  },
+  {
+    "id": "mechanic",
+    "name": "Bolt",
+    "role": "Station mechanic",
+    "dimension": "orbit",
+    "position": [
+      -10.5,
+      65,
+      9.5
+    ],
+    "profession": "toolsmith",
+    "dialogue": "Welcome to the world of endless possibility! We saved you a berth. The flight test ends here; your adventures do not. Go make friends out there.",
+    "action": "arrival"
+  },
+  {
+    "id": "medic",
+    "name": "Dr Jun",
+    "role": "Station medic",
+    "dimension": "orbit",
+    "position": [
+      10.5,
+      65,
+      9.5
+    ],
+    "profession": "cleric",
+    "dialogue": "Your suit handles space forever. Underwater you still need to breathe. The ship floats up unless the ceiling disagrees.",
+    "action": "resident"
+  },
+  {
+    "id": "porter",
+    "name": "Ada",
+    "role": "Dock worker",
+    "dimension": "orbit",
+    "position": [
+      -10.5,
+      65,
+      -8.5
+    ],
+    "profession": "mason",
+    "dialogue": "We dock rockets, egos, and occasionally a very confused cow. Land anywhere; this station belongs to all of us.",
+    "action": "resident"
+  },
+  {
+    "id": "diplomat",
+    "name": "Sol",
+    "role": "Friendship envoy",
+    "dimension": "orbit",
+    "position": [
+      10.5,
+      65,
+      -8.5
+    ],
+    "profession": "cartographer",
+    "dialogue": "A galaxy can have battles without making conquest the goal. Listen, help, invite people along. The greatest victory will be an invasion that becomes a conversation.",
+    "action": "resident"
+  }
+]

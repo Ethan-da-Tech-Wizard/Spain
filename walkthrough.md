@@ -1,31 +1,13 @@
-# Java Voxel Space Game Walkthrough
+# Spain: Playable Test Walkthrough
 
-The layout design, system interface blueprints, and software specifications for the Java-based Voxel Space Game have been successfully drafted and verified.
+1. Manually launch the Spain Prism instance. Start in Harborlight on normal Minecraft Earth.
+2. Talk to Mira, then Dr Pip at the east workshop for the story, building materials and a spacesuit. These conversations are optional for building and travel.
+3. Run `/spain create`. Add a Spore hull, wings, an engine and a cockpit. Stretch, rotate the preview or undo changes. Close the screen to inspect the rocket. You can also capture a Minecraft block sculpture using two corner selections.
+4. Board from the creator or use `/spain board`. The player occupies the cockpit; the chase camera follows the rocket. WASD/mouse moves and turns; Space climbs; Shift descends; F5 changes views.
+5. Explore Earth freely. `/spain land` exits and lets the craft settle. Land on leaves, mountain tops or water. Removing support makes the ship fall without damage. Underwater ships rise unless a ceiling blocks them; the player's underwater breath remains finite.
+6. Fly above Y 280 into space. Approach Starforge Station at X 0, Y 65, Z 0. Quick travel is available from the Galaxy Guide even while piloting.
+7. The workers welcome you to the world of endless possibility. The flight test completes, and exploration remains available. Speak to the mechanic, medic, porter, envoy, navigator and Lucy.
+8. Visit Iona on Astraea, accept A shared sky, collect a crystal from Sera on Cinder, and bring it back for the one-time reward.
+9. Choose a default Minecraft appearance, the locally imported Spore creature, or capture your own block creature. Press F5 to inspect it.
 
----
-
-## 📂 Design Files Created (Artifacts)
-*   [voxel_game_layout.md](file:///Users/mirandazavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_game_layout.md) — User interface rules, color-coded unified 3D coordinates ($X, Y, Z$ vectors), flat cubical gravity mechanics, and Borderlands-style cloning respawn.
-*   [voxel_tech_architecture.md](file:///Users/mirandavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_tech_architecture.md) — Software requirements (LWJGL 3, JOML, OpenJDK 21), vertex shader formulas for the "Origami Warp" folding transition, camera portal view matrix offsets, and greedy meshing algorithms.
-*   [voxel_save_format.md](file:///Users/mirandavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_save_format.md) — Voxel serialization schemas using compressed Run-Length Encoding (RLE) streams and Named Binary Tag (NBT) compound structures.
-*   [voxel_quests_dialogue.md](file:///Users/mirandavala/.gemini/antigravity/brain/3c12e510-edc1-44c4-9207-847fc1e1df0d/voxel_quests_dialogue.md) — Morrowind-style interactive keyword dialogue frames, RuneScape animated NPC avatars, Oblivion-style guild hierarchies, Void end-game loops, the **Sabotage & Rehabilitation** final boss, the **Lucy AI guide character arc (with in-depth script dialogue)**, and fully unlocked spaceship component builders.
-
----
-
-## 🎨 Layout Highlights
-
-1.  **Voxel Edge Traversals**: Dynamic view matrix offsets act like a portal lens to bend adjacent faces flat beneath the player's feet, allowing seamless continuous walking across all 6 faces of the cubical planet.
-2.  **Color-Coded Nav**: The top-left HUD coordinates are mapped to intuitive primary color visual cues (<span style="color:#ff3333; font-weight:bold;">X/Red</span>, <span style="color:#33ff33; font-weight:bold;">Y/Green</span>, <span style="color:#3333ff; font-weight:bold;">Z/Blue</span>).
-3.  **Low-Penalty Loop**: Ship destructions occur but player cloning (Borderlands-style) preserves construction templates and respawns resources at the nearest space station.
-4.  **Keyword Dialogue Grid**: Conversing with NPCs highlights keywords to open new lore tabs and automatically log coordinates to the player's coordinate compass.
-5.  **Sabotage & Rehabilitation Boss Loop**: Disable the boss's power stations and redirect their supply cargo to drain their shields. Once defenseless, board their ship and use historical lore logs to rehabilitate them instead of executing them.
-6.  **Full Creative Freedom**: All spaceship parts, hulls, engines, and reactors are completely unlocked from the start of the game, encouraging immediate customization.
-7.  **The Lucy Mainframe Test**: Enter the double blast doors of the planetary mainframe, refuse Lucy's direct command to overload the core by telling her she is crazy, and walk out. Exiting the doors reveals her standing in the prior room, proud that you rejected "ruthless nameless violence."
-8.  **Voxel Flight Control Layout**: Rocket thrust velocity is mapped to Up/Down Arrow keys, while 3D attitude rotations are mapped to WASD keys.
-9.  **Multi-Surface Landing**: Piloting freedom allows landing the rocket anywhere—including on tree tops and building rooftops—by snapping the collision AABB to the highest solid block.
-10. **BPH Speedometer**: Displays speed in blocks per hour (bph), calculated by scaling spatial velocity relative to the game's 20Hz tick rate.
-11. **Modulated Laser Hum**: Continuous mining laser outputs a pitch-modulated OpenAL sound loop (*"flurruruuurruuuuuururur"*).
-12. **Texture-Scrolling Weather Shaders**: Standard falling rain/snow is simulated using local box-meshes that scroll textures directly on the GPU, avoiding CPU particle overhead for older computers.
-13. **Togglable Camera Angles**: Switch seamlessly between 3rd Person Follow, Cockpit First-Person, Top-Down Landing, and Cinematic Orbit sweep cameras.
-14. **15 Lore Constellations**: The night sky is mapped with 15 pixelated constellations linked to deep planetary culture missions and lore logs.
-15. **Minecraft-Style Cracking**: Block surfaces render a 10-stage cracking texture overlay during laser mining operations.
+Updates preserve the world. Build/verification/installation do not open or relaunch the game; restart manually when ready to pick up a changed Fabric mod.
