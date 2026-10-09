@@ -1,5 +1,7 @@
 # Voxel Space Game: Technical Architecture (Java / LWJGL)
 
+> **Current direction (October 9, 2026):** use Minecraft Java Edition as the game engine. The custom LWJGL renderer, custom physics and custom save implementation below are historical design references. Start with [README.md](README.md) and [implementation_plan.md](implementation_plan.md) for the active Minecraft implementation.
+
 This document outlines the software requirements, JVM libraries, and graphics math required to implement the voxel planetary mechanics, the "Origami Warp" landing transition, and hybrid rocket physics in Java.
 
 ---

@@ -1,0 +1,10 @@
+{
+ "style":"Native Minecraft blocks and texel density throughout. Spore geometry is recolored into the same palette; no photorealistic textures or sharp high-poly props.",
+ "sources":[
+  {"id":"minecraft","role":"Terrain, normal player skins, mobs, material textures, inventory and renderer","source":"User's Minecraft Java 26.3 installation","bundled":false},
+  {"id":"melty","role":"Prepared crate and pine GLB geometry with embedded colors, converted to blocks","source":"../meltyblndr/holy-order/assets/waw/models","credits":"World at War / Activision / Treyarch","bundled":false},
+  {"id":"spore","role":"UFO hull, thruster shape, creature silhouette; same block materials as Minecraft","source":"Steam app 17390 Data/Spore_Graphics.package","resources":[{"key":"00000000:f651a4d4","name":"loading_placeholder_ufo"},{"key":"00000000:62052d87","name":"loading_placeholder_creature"},{"key":"00000000:73db2759","name":"ci_bribe_rocket"}],"extractor":"https://github.com/Spore-Community/SporeModder-FX","credits":"EA / Maxis","bundled":false},
+  {"id":"spore-expansions","role":"Installed and catalog-ready sources for future civilization parts, creatures and adventures","steam_apps":[17440,24720],"bundled":false},
+  {"id":"skycraft","role":"Reference for Fabric integration; no Skyrim bridge or code copied","source":"https://github.com/chasmlol/SkyCraft","license":"MIT","bundled":false}
+ ]
+}

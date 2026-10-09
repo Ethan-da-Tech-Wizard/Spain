@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "id": "spain",
+  "version": "0.1.0",
+  "name": "Spain \u00b7 Starforge",
+  "description": "Earth-to-space flight, player-built rockets and forgiving landings.",
+  "authors": [
+    "Ethan-da-Tech-Wizard"
+  ],
+  "environment": "*",
+  "entrypoints": {
+    "main": [
+      "dev.spain.SpainMod"
+    ],
+    "client": [
+      "dev.spain.SpainClient"
+    ]
+  },
+  "depends": {
+    "fabricloader": ">=0.19.5",
+    "minecraft": "26.3",
+    "java": ">=25",
+    "fabric-api": "*"
+  },
+  "mixins": [
+    {
+      "config": "spain.client.mixins.json",
+      "environment": "client"
+    }
+  ]
+}

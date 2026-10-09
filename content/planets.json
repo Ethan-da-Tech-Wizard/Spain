@@ -1,0 +1,5 @@
+[
+  {"id":"astraea","name":"Astraea-4","city":"Mosslight","theme":"forest","biome":"forest","surface":"grass_block","subsurface":"dirt","wall":"oak_planks","roof":"dark_oak_planks","accent":"moss_block","sky":"#71adcb","fog":"#b8d6c8","travel":2},
+  {"id":"cinder","name":"Cinder-7","city":"Emberhaven","theme":"volcanic","biome":"badlands","surface":"red_sandstone","subsurface":"basalt","wall":"polished_blackstone_bricks","roof":"cut_copper","accent":"shroomlight","sky":"#bd7457","fog":"#c39175","travel":3},
+  {"id":"borealis","name":"Borealis-9","city":"Aurora Reach","theme":"ice","biome":"snowy_plains","surface":"snow_block","subsurface":"packed_ice","wall":"quartz_bricks","roof":"prismarine_bricks","accent":"sea_lantern","sky":"#728fc9","fog":"#c0d6ee","travel":4}
+]
