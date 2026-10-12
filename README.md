@@ -25,6 +25,19 @@ Spain is a playable Earth-to-space adventure built on **Minecraft Java** with a 
 
 On desktop you can also launch **Play Spain.desktop**. Restart your Spain instance after updating. Building, checking and installing never launch the game automatically.
 
+## Assets and requirements
+
+Spain **uses Minecraft's own assets for gameplay**, and ships none of them. You need your own copy of **Minecraft Java Edition** (run through [Prism Launcher](https://prismlauncher.org)); Spain reads from that installation at runtime.
+
+| Source | Used for | Included in this repo? |
+|---|---|---|
+| **Minecraft Java** (Mojang / Microsoft) | Terrain, player skins, mobs, material textures, inventory and the renderer | No. Comes from your own install |
+| **Spore** (EA / Maxis) | UFO hull, thruster and creature shapes, recolored into the Minecraft block palette | No. Extracted locally from your own Steam copy; never committed |
+| **World at War models** (Activision / Treyarch) | Optional crate and pine geometry converted to blocks | No. Local files only |
+| **SkyCraft** (MIT) | Reference for Fabric integration only; no code copied | No |
+
+Everything extracted lands in git-ignored local folders (`.tools/`, `local-assets/`), so the repository contains only Spain's own code and content. See [`content/assets.json`](content/assets.json) for the full manifest and credits.
+
 ## Repository map
 
 | Path | What lives there |
@@ -44,4 +57,4 @@ Start with [GAME_DESIGN.md](GAME_DESIGN.md), then [voxel_tech_architecture.md](v
 
 Released under the [MIT License](LICENSE).
 
-<sub>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft.</sub>
+<sub>Not an official Minecraft product. Not approved by or associated with Mojang or Microsoft. Minecraft is a trademark of Mojang Synergies AB; Spore is a trademark of Electronic Arts Inc.; all other assets belong to their respective owners.</sub>
