@@ -1,6 +1,6 @@
 # Spain — Starforge
 
-A Minecraft Java adventure adding a rocket-building workflow, space travel, dialogue, and exploration.
+A Minecraft Java mod and data-pack project exploring rocket building, space travel, dialogue, and exploration.
 
 **Status:** Game mod and data pack  
 **Built with:** Java, Fabric, Minecraft data pack
