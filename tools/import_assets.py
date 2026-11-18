@@ -1,7 +1,13 @@
 #!/usr/bin/env python3
+# Program: Spain - import_assets.py
+# Programmer: Ethan-da-Tech-Wizard (written with Claude, an AI assistant)
+# Last Modified: 2026-11-18
+# Purpose: Converts selected Melty GLB 3D models into small Minecraft structure files by sampling their surface and matching colors to a block palette.
 """Convert selected local Melty GLB art into ordinary, editable Minecraft blocks."""
+# Lets type hints use the newer style.
 from __future__ import annotations
 
+# Imports: reading binary data, hashes, JSON, math, images (Pillow) and our NBT writer.
 import argparse
 import hashlib
 import io
@@ -13,7 +19,9 @@ from pathlib import Path
 from PIL import Image
 from nbt import structure
 
+# ROOT = project folder.
 ROOT = Path(__file__).resolve().parents[1]
+# Blocks the converter may use, each with an approximate color (red, green, blue).
 PALETTE = {
     'oak_planks': (162, 130, 79), 'spruce_planks': (114, 84, 48),
     'dark_oak_planks': (66, 43, 20), 'oak_log': (107, 85, 50),
@@ -24,9 +32,12 @@ PALETTE = {
 
 
 def load_glb(path):
+    """Read a GLB v2 file and return its JSON description and binary data."""
+    # A GLB file starts with a 12-byte header: magic text, version 2 and total length. Check all three.
     raw = path.read_bytes()
     magic, version, length = struct.unpack_from('<4sII', raw)
     if magic != b'glTF' or version != 2 or length != len(raw): raise ValueError('Not a GLB v2 file')
+    # Then come chunks: a JSON chunk (the scene description) and a binary chunk (the data).
     position, document, binary = 12, None, None
     while position < length:
         size, kind = struct.unpack_from('<II', raw, position)
@@ -39,22 +50,30 @@ def load_glb(path):
 
 
 def accessor(document, binary, index):
+    """Return the list of tuples described by accessor number index."""
+    # An accessor says how to read a list of numbers from the binary data.
     item = document['accessors'][index]
     if 'sparse' in item: raise ValueError('Sparse accessors are not supported')
     view = document['bufferViews'][item['bufferView']]
+    # Map the file's type codes to struct format letters and component counts.
     kind = {5121: 'B', 5123: 'H', 5125: 'I', 5126: 'f'}[item['componentType']]
     count = {'SCALAR': 1, 'VEC2': 2, 'VEC3': 3, 'VEC4': 4}[item['type']]
     fmt = '<' + kind * count
+    # Honor the byte stride and offsets so interleaved data is read correctly.
     stride = view.get('byteStride', struct.calcsize(fmt))
     offset = view.get('byteOffset', 0) + item.get('byteOffset', 0)
     return [struct.unpack_from(fmt, binary, offset + i * stride) for i in range(item['count'])]
 
 
 def node_transform(point, node):
+    """Apply a node's transform (matrix, or scale then rotation then translation) to a 3D point."""
+    # A node may give a full matrix, or separate scale, rotation (quaternion) and translation.
     if 'matrix' in node:
         m = node['matrix']
         return tuple(sum(m[i + 4*j] * point[j] for j in range(3)) + m[i+12] for i in range(3))
+    # Apply scale first.
     p = tuple(a*b for a, b in zip(point, node.get('scale', [1, 1, 1])))
+    # Then rotate using the quaternion formula.
     x, y, z, w = node.get('rotation', [0, 0, 0, 1])
     vx, vy, vz = p
     tx, ty, tz = 2*(y*vz-z*vy), 2*(z*vx-x*vz), 2*(x*vy-y*vx)
@@ -63,11 +82,16 @@ def node_transform(point, node):
 
 
 def primitives(document, binary):
+    """Collect every triangle mesh in the scene as (positions, uvs, indices, image, color factor)."""
     result = []
+    # Find the top-level nodes of the scene.
     roots = document.get('scenes', [{'nodes': [i for i in range(len(document['nodes'])) if not any(i in n.get('children', []) for n in document['nodes'])]}])[document.get('scene', 0)]['nodes']
+    # walk visits each node and its children, applying every parent transform.
     def walk(index, parents):
+        """Visit one node and, recursively, its children."""
         node = document['nodes'][index]
         transforms = [node] + parents
+        # For each triangle mesh: read positions, texture coordinates, indices and the material color/texture.
         if 'mesh' in node:
             for primitive in document['meshes'][node['mesh']]['primitives']:
                 if primitive.get('mode', 4) != 4: continue
@@ -90,53 +114,70 @@ def primitives(document, binary):
 
 
 def voxelize(path: Path, longest: int):
+    """Turn a GLB model into Minecraft structure bytes plus a small info dictionary."""
+    # Limit the model size to 2..32 blocks on its longest side.
     if not 2 <= longest <= 32: raise ValueError('Asset size must be 2..32 blocks')
     document, binary = load_glb(path)
     parts = primitives(document, binary)
+    # Find the model's bounding box and a scale that fits the longest side into the requested blocks.
     points = [p for positions, *_ in parts for p in positions]
     low = [min(p[i] for p in points) for i in range(3)]
     high = [max(p[i] for p in points) for i in range(3)]
     scale = (longest - .001) / max(b-a for a, b in zip(low, high))
     size = [max(1, math.ceil((b-a)*scale)) for a, b in zip(low, high)]
+    # blocks maps a grid cell to a palette index.
     blocks = {}
     palette = list(PALETTE)
     for positions, uvs, indices, image, factor in parts:
         vertices = [tuple((p[i]-low[i])*scale for i in range(3)) for p in positions]
+        # Go through each triangle and sample points on its surface.
         for offset in range(0, len(indices), 3):
             ids = indices[offset:offset+3]
             a, b, c = [vertices[i] for i in ids]
+            # More samples for larger triangles so no gaps are left.
             samples = max(1, math.ceil(max(math.dist(a,b), math.dist(b,c), math.dist(c,a))*2))
             for row in range(samples+1):
                 for column in range(samples+1-row):
+                    # Barycentric weights give each sample point inside the triangle.
                     weights = (1-(row+column)/samples, row/samples, column/samples)
                     point = tuple(sum(v[axis]*weight for v, weight in zip((a,b,c), weights)) for axis in range(3))
+                    # Look up the texture color at that point (or use white if there is no texture).
                     if image is not None:
                         uv = tuple(sum(uvs[i][axis]*weight for i, weight in zip(ids, weights)) for axis in range(2))
                         color = image.getpixel((int((uv[0] % 1)*image.width), int((uv[1] % 1)*image.height)))
                     else: color = (255, 255, 255, 255)
+                    # Skip nearly transparent points.
                     if color[3]*factor[3] < 100: continue
                     rgb = tuple(color[i]*factor[i] for i in range(3))
+                    # Pick the palette block whose color is closest.
                     match = min(range(len(palette)), key=lambda i: sum((rgb[k]-PALETTE[palette[i]][k])**2 for k in range(3)))
+                    # Store the block in its grid cell.
                     cell = tuple(max(0, min(size[i]-1, math.floor(point[i]))) for i in range(3))
                     blocks[cell] = match
+    # Return the structure bytes plus size, block count and a hash of the source file.
     if not blocks: raise ValueError('Asset conversion produced no blocks')
     return structure(size, blocks, palette), {'size': size, 'blocks': len(blocks), 'sha256': hashlib.sha256(path.read_bytes()).hexdigest()}
 
 
 def main():
+    """Convert the crate and pine models and write their provenance file."""
+    # Command line: --source picks the folder with the GLB files.
     parser = argparse.ArgumentParser()
     parser.add_argument('--source', type=Path, default=ROOT.parent/'meltyblndr/holy-order/assets/waw/models')
     args = parser.parse_args()
     output = ROOT/'local-assets/structures'
     output.mkdir(parents=True, exist_ok=True)
     records = []
+    # Convert the crate (3 blocks) and the pine (12 blocks), saving .nbt files.
     for name, longest in [('crate', 3), ('pine', 12)]:
         path = args.source/(name+'.glb')
         data, record = voxelize(path, longest)
         (output/(name+'.nbt')).write_bytes(data)
         records.append({'id': name, 'source': str(path.resolve()), **record})
         print(f'{name}: {record["blocks"]} blocks, {record["size"]}')
+    # Record where the art came from and how it was converted.
     (ROOT/'local-assets/provenance.json').write_text(json.dumps({'source_project': 'meltyblndr/Holy Order', 'upstream_art': 'Call of Duty: World at War (Activision / Treyarch)', 'conversion': 'Local GLB geometry and embedded texture colors sampled into vanilla Minecraft blocks. Original game rights remain with their holders.', 'assets': records}, indent=2)+'\n')
 
 
+# Run main when executed directly.
 if __name__ == '__main__': main()

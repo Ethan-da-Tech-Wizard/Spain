@@ -1,3 +1,8 @@
+// Program: Spain - MinecraftChecks.java
+// Programmer: Ethan-da-Tech-Wizard (written with Claude, an AI assistant)
+// Last Modified: 2026-11-18
+// Purpose: Test program that starts a real Minecraft server in GameTest mode and checks the Spain data pack and mod: cities, NPCs, quests, flight, saving and appearance.
+// Imports: Minecraft server, game test, world and network classes used by the checks.
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -24,38 +29,50 @@ import net.minecraft.world.phys.Vec3;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+// Each check() call prints a numbered line, and any failed check stops the run with an error.
 /** Runs against Mojang's real server; no replacement movement, NPC, save or command engine. */
 public final class MinecraftChecks {
+    // Counts how many checks have passed.
     private static int checks;
 
+    /** Starts Minecraft's own GameTest server after registering our test function. */
     public static void main(String[] args) throws Exception {
+        // Prepare Minecraft's version info and built-in registries.
         SharedConstants.tryDetectVersion();
         net.minecraft.server.Bootstrap.bootStrap();
         // This standalone probe has no loader bootstrap hook. Open only the test-function
         // registry to install its check, then freeze it again before loading any worlds.
+        // Registries are locked after startup, so briefly unlock the test list with reflection...
         var frozen = net.minecraft.core.MappedRegistry.class.getDeclaredField("frozen");
         frozen.setAccessible(true);
         frozen.setBoolean(BuiltInRegistries.TEST_FUNCTION, false);
         try {
+            // ...register our test under the name spain:core...
             java.util.function.Consumer<GameTestHelper> check = MinecraftChecks::test;
             var holder = Registry.registerForHolder(BuiltInRegistries.TEST_FUNCTION, Identifier.fromNamespaceAndPath("spain", "core"), check);
             var bind = net.minecraft.core.Holder.Reference.class.getDeclaredMethod("bindValue", Object.class);
             bind.setAccessible(true);
             bind.invoke(holder, check);
         } finally {
+            // ...and lock it again no matter what happened.
             frozen.setBoolean(BuiltInRegistries.TEST_FUNCTION, true);
         }
+        // Run the server; it will call test() below.
         GameTestMainUtil.runGameTestServer(args, ignored -> {});
     }
 
+    /** The main test: schedules the setup and then runs every check in order. */
     private static void test(GameTestHelper helper) {
+        // At tick 100, force-load the world areas so the cities finish building.
         helper.runAtTickTime(100, () -> {
             command(helper.getLevel().getServer(), null, "execute in minecraft:overworld run forceload add -32 -32 31 31");
             for (String id : new String[]{"orbit", "astraea", "cinder", "borealis"})
                 command(helper.getLevel().getServer(), null, "execute in spain:" + id + " run forceload add -32 -32 31 31");
         });
+        // At tick 140, run all the checks. Any exception is printed and reported as a test failure.
         helper.runAtTickTime(140, () -> {
             try {
+                // Cities, landing pads and NPC counts for each world.
                 MinecraftServer server = helper.getLevel().getServer();
                 check(score(server, ScoreHolder.forNameOnly("#built"), "spain.state") == 2, "Cities finish building");
                 for (String id : new String[]{"orbit", "astraea", "cinder", "borealis"}) {
@@ -69,6 +86,7 @@ public final class MinecraftChecks {
                     int expected=id.equals("earth")?4:id.equals("orbit")?6:1;
                     check(residents.size()==expected,"NPCs spawn exactly once: "+id);
                 }
+                // Check the imported crate, then check that reloading the data pack keeps player builds.
                 ServerLevel astraea = dimension(server, "astraea");
                 if (Boolean.getBoolean("spain.imported"))
                     check(!astraea.getBlockState(new BlockPos(8, 65, 10)).isAir(), "Local imported crate is placed");
@@ -77,6 +95,7 @@ public final class MinecraftChecks {
                 check(astraea.getBlockState(new BlockPos(2, 65, 2)).is(Blocks.DIAMOND_BLOCK), "Reload preserves player builds");
                 astraea.setBlockAndUpdate(new BlockPos(2, 65, 2), Blocks.AIR.defaultBlockState());
 
+                // Create a real survival player with an embedded network connection.
                 // GameTestHelper's mock overrides gameMode() to always return CREATIVE.
                 // Use a regular ServerPlayer and Mojang's embedded connection instead.
                 var profile = new com.mojang.authlib.GameProfile(java.util.UUID.randomUUID(), "test-mock-player");
@@ -86,6 +105,7 @@ public final class MinecraftChecks {
                 new io.netty.channel.embedded.EmbeddedChannel(connection);
                 server.getPlayerList().placeNewPlayer(connection, player, cookie);
                 player.setGameMode(GameType.SURVIVAL);
+                // Welcome the player and check the Earth start and the quest steps with the mayor and scientist.
                 command(server, player, "function spain:player/welcome");
                 command(server, player, "function spain:travel/earth");
                 check(player.level()==server.overworld(), "Players begin on Earth");
@@ -96,6 +116,7 @@ public final class MinecraftChecks {
                 interact(server,player,"earth","scientist");
                 check(score(server,player,"spain.launch")==2,"Scientist issues rocket quest");
                 check(player.entityTags().contains("spain.suit"),"Scientist activates spacesuit");
+                // Flight checks: capture a hull, board, fly into space, travel, land and restore abilities.
                 var flight=new dev.spain.FlightSystem();flight.load(server);flight.tick(server);
                 flight.action(player,"capture");for(int scan=0;scan<4;scan++)flight.tick(server);
                 check(flight.ship(player)!=null&&!flight.ship(player).parts.isEmpty(),"Player-built hull captured");
@@ -109,6 +130,7 @@ public final class MinecraftChecks {
                 check(player.entityTags().contains("spain.test_complete"),"Workers welcome pilot; station completes test");
                 flight.action(player,"land");
                 check(!player.getAbilities().mayfly&&!player.getAbilities().flying,"Disembarking restores survival abilities");
+                // Physics checks with a one-block ship: it lands on a surface, falls without support, floats in water and is stopped by a ceiling.
                 var physics=new dev.spain.FlightSystem.Ship();physics.dimension="spain:astraea";physics.anchor=new Vec3(3,68,3);
                 physics.parts.add(new dev.spain.FlightSystem.Part(0,0,0,Blocks.IRON_BLOCK.defaultBlockState()));
                 for(int i=0;i<40;i++)flight.settle(physics);
@@ -125,6 +147,7 @@ public final class MinecraftChecks {
                 for(int i=0;i<30;i++)flight.settle(physics);
                 check(physics.anchor.y<67.1,"Ceiling blocks ship buoyancy");
                 for(int y=65;y<=68;y++)astraea.setBlockAndUpdate(new BlockPos(3,y,3),Blocks.AIR.defaultBlockState());
+                // Appearance checks: Spore avatar, custom avatar, save and reload.
                 var visuals=dev.spain.SpainMod.VISUALS;visuals.load(server);
                 if(visuals.available()) {
                     visuals.select(player,"spore");visuals.tick(server);
@@ -137,6 +160,7 @@ public final class MinecraftChecks {
                     check(player.entityTags().contains("spain.avatar.custom"),"Custom avatar persists through save and reload");
                     visuals.select(player,"default");visuals.clear();
                 }
+                // Air supply checks in water and out of water.
                 // The spacesuit must not refill breath while eyes are underwater.
                 command(server,player,"function spain:travel/astraea");
                 for(int x=2;x<=4;x++)for(int z=2;z<=4;z++)for(int y=65;y<=69;y++)astraea.setBlockAndUpdate(new BlockPos(x,y,z),Blocks.WATER.defaultBlockState());
@@ -146,9 +170,11 @@ public final class MinecraftChecks {
                 player.setPos(0.5,73,0.5);player.baseTick();flight.tick(server);
                 check(player.getAirSupply()==player.getMaxAirSupply(),"Spacesuit restores air outside water");
                 for(int x=2;x<=4;x++)for(int z=2;z<=4;z++)for(int y=65;y<=69;y++)astraea.setBlockAndUpdate(new BlockPos(x,y,z),Blocks.AIR.defaultBlockState());
+                // Save and reload checks for ships.
                 flight.save(server);int parts=flight.ship(player).parts.size();
                 flight.load(server);check(flight.ship(player).parts.size()==parts,"Rocket parts persist through save and reload");
                 command(server,player,"scoreboard players set @s spain.launch 0");
+                // Rocket creator checks: hull, wings, engine, cabin, undo, boarding and recall.
                 flight.design(player,"clear");flight.design(player,"hull");
                 check(!flight.ship(player).parts.isEmpty(),"Creator adds hull without visiting NPC");
                 int hull=flight.ship(player).parts.size();flight.design(player,"wings");
@@ -161,6 +187,7 @@ public final class MinecraftChecks {
                 check(flight.ship(player).anchor.distanceTo(player.position())<.01,"Player occupies the controlled cockpit center");
                 flight.action(player,"land");flight.action(player,"recall");
                 check(player.position().distanceTo(flight.ship(player).anchor)<2,"Rocket can be recalled independently");
+                // Quick-travel trigger checks.
                 command(server, player, "scoreboard players set @s spain.cooldown 0");
                 command(server, player, "scoreboard players enable @s spain.travel");
                 server.getCommands().performPrefixedCommand(player.createCommandSourceStack(), "trigger spain.travel set 2");
@@ -172,6 +199,7 @@ public final class MinecraftChecks {
                     check(player.level() == dimension(server, id), "Travel arrives: " + id);
                     check(player.getY() == 65, "Travel safely lands: " + id);
                 }
+                // Talk to NPCs, then check the Iona quest from accept to reward, including that it cannot be repeated.
                 interact(server, player, "orbit", "navigator");
                 interact(server, player, "orbit", "lucy");
                 interact(server, player, "astraea", "iona");
@@ -198,6 +226,7 @@ public final class MinecraftChecks {
                 check(score(server, player, "spain.quest") == 2, "Reload preserves quest progress");
                 for (String id : new String[]{"orbit", "astraea", "cinder", "borealis"})
                     command(server, null, "execute in spain:" + id + " run forceload remove -32 -32 31 31");
+                // Write the final report of passed checks.
                 // Save through Minecraft itself; this world can also be copied into a separate Prism instance.
                 server.getPlayerList().remove(player);
                 server.saveEverything(true, true, true);
@@ -212,6 +241,7 @@ public final class MinecraftChecks {
         });
     }
 
+    /** Moves the player next to an NPC in a world and right-clicks it twice, checking the dialogue tag each time. */
     private static void interact(MinecraftServer server, ServerPlayer player, String dimension, String npc) {
         command(server, player, "function spain:travel/" + dimension);
         ServerLevel level = dimension(server, dimension);
@@ -225,23 +255,27 @@ public final class MinecraftChecks {
         check(player.entityTags().contains("spain.met." + npc), "NPC can be spoken to again: " + npc);
     }
 
+    /** Finds a world by short name ("earth" is the overworld; others are in the spain namespace). */
     private static ServerLevel dimension(MinecraftServer server, String name) {
         if(name.equals("earth"))return server.overworld();
         return server.getLevel(ResourceKey.create(Registries.DIMENSION, Identifier.fromNamespaceAndPath("spain", name)));
     }
 
+    /** Runs a command, as the player if one is given, otherwise as the server. */
     private static void command(MinecraftServer server, ServerPlayer player, String command) {
         var source = server.createCommandSourceStack();
         if (player != null) source = source.withEntity(player).withLevel((ServerLevel) player.level()).withPosition(player.position());
         server.getCommands().performPrefixedCommand(source, command);
     }
 
+    /** Reads a scoreboard value (-1 if the holder has no score). */
     private static int score(MinecraftServer server, ScoreHolder player, String objective) {
         var scoreboard = server.getScoreboard();
         var value = scoreboard.getPlayerScoreInfo(player, scoreboard.getObjective(objective));
         return value == null ? -1 : value.value();
     }
 
+    /** Fails with the message if the condition is false; otherwise counts and prints the check. */
     private static void check(boolean success, String message) {
         if (!success) throw new AssertionError(message);
         checks++;
