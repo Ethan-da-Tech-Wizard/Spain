@@ -1,3 +1,9 @@
+// ==============================================================================
+// Program: FlightView.java
+// Programmer: Ethan-da-Tech-Wizard
+// Last Modified: November 18, 2026
+// Purpose: First-person and third-person spacecraft cockpit camera orientation handler.
+// ==============================================================================
 package dev.spain;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.RegistryFriendlyByteBuf;

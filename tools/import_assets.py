@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+
+# ==============================================================================
+# Program: import_assets.py
+# Programmer: Ethan-da-Tech-Wizard
+# Last Modified: November 18, 2026
+# Purpose: Texture and sprite batch converter processing raw PNG assets for game biomes.
+# ==============================================================================
 """Convert selected local Melty GLB art into ordinary, editable Minecraft blocks."""
 from __future__ import annotations
 

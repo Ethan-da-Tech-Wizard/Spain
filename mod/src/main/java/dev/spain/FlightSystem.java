@@ -1,3 +1,9 @@
+// ==============================================================================
+// Program: FlightSystem.java
+// Programmer: Ethan-da-Tech-Wizard
+// Last Modified: November 18, 2026
+// Purpose: 6-DOF spaceship physics simulation calculating thrust, drag, and gravity wells.
+// ==============================================================================
 package dev.spain;
 
 import com.google.gson.*;

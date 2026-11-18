@@ -1,3 +1,9 @@
+// ==============================================================================
+// Program: SpainClient.java
+// Programmer: Ethan-da-Tech-Wizard
+// Last Modified: November 18, 2026
+// Purpose: Fabric client entry point initializing keybinds, HUD overlays, and renderers.
+// ==============================================================================
 package dev.spain;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

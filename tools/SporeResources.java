@@ -1,3 +1,9 @@
+// ==============================================================================
+// Program: SporeResources.java
+// Programmer: Ethan-da-Tech-Wizard
+// Last Modified: November 18, 2026
+// Purpose: Java resource loader unpacking internal procedural assets and palettes.
+// ==============================================================================
 import sporemodder.MainApp;
 import sporemodder.HashManager;
 import sporemodder.file.dbpf.*;

@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+
+# ==============================================================================
+# Program: setup_spore.py
+# Programmer: Ethan-da-Tech-Wizard
+# Last Modified: November 18, 2026
+# Purpose: Spore asset extraction bridge setting up reverse-engineered creature formats.
+# ==============================================================================
 """Install a pinned, verified SporeModder FX CLI locally; extracted art stays local."""
 import hashlib,urllib.request,zipfile
 from pathlib import Path

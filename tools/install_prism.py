@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+
+# ==============================================================================
+# Program: install_prism.py
+# Programmer: Ethan-da-Tech-Wizard
+# Last Modified: November 18, 2026
+# Purpose: Automated Prism Launcher instance provisioning and mod deployment script.
+# ==============================================================================
 """Install the verified starter world in a separate, managed Prism instance."""
 from __future__ import annotations
 

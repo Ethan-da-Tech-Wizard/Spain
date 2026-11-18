@@ -1,4 +1,11 @@
 #!/usr/bin/env bash
+
+# ==============================================================================
+# Program: update.sh
+# Programmer: Ethan-da-Tech-Wizard
+# Last Modified: November 18, 2026
+# Purpose: Data pack and mod asset update synchronizer for Prism launcher instances.
+# ==============================================================================
 # Prepare and verify Spain; deliberately never launch or restart a game window.
 set -euo pipefail
 cd "$(dirname "$0")/.."

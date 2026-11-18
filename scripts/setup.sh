@@ -1,4 +1,12 @@
 #!/usr/bin/env bash
+
+# ==============================================================================
+# Program: setup.sh
+# Programmer: Ethan-da-Tech-Wizard
+# Last Modified: November 18, 2026
+# Purpose: Environment setup and dependency installation script for Starforge.
+#          Configures Java JDK runtime paths and fetches Fabric launcher tooling.
+# ==============================================================================
 set -euo pipefail
 cd "$(dirname "$0")/.."
 if [[ ! -x .tools/jdk25/bin/java ]]; then

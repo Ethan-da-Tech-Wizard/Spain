@@ -1,3 +1,9 @@
+# ==============================================================================
+# Program: extend_pack.py
+# Programmer: Ethan-da-Tech-Wizard
+# Last Modified: November 18, 2026
+# Purpose: Data pack expansion utility appending space exploration quests and dialogs.
+# ==============================================================================
 """Earth-to-station test, layered over the colony content generator."""
 import json
 from pathlib import Path

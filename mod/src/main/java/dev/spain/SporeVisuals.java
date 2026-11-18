@@ -1,3 +1,9 @@
+// ==============================================================================
+// Program: SporeVisuals.java
+// Programmer: Ethan-da-Tech-Wizard
+// Last Modified: November 18, 2026
+// Purpose: Client-side OpenGL shader and visual particle renderer for planetary orbits.
+// ==============================================================================
 package dev.spain;
 
 import com.google.gson.*;

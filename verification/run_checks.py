@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+
+# ==============================================================================
+# Program: run_checks.py
+# Programmer: Ethan-da-Tech-Wizard
+# Last Modified: November 18, 2026
+# Purpose: Automated verification runner executing Minecraft check suites.
+# ==============================================================================
 """Compile a small probe against the user's Minecraft and run Mojang's GameTest server."""
 import json
 import os

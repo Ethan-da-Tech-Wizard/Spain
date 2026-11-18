@@ -1,3 +1,9 @@
+// ==============================================================================
+// Program: ShipCameraMixin.java
+// Programmer: Ethan-da-Tech-Wizard
+// Last Modified: November 18, 2026
+// Purpose: Mixin intercepting vanilla camera transformations to support spaceship flight.
+// ==============================================================================
 package dev.spain.mixin;
 import dev.spain.SpainClient;
 import net.minecraft.client.Camera;

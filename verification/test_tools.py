@@ -1,3 +1,9 @@
+# ==============================================================================
+# Program: test_tools.py
+# Programmer: Ethan-da-Tech-Wizard
+# Last Modified: November 18, 2026
+# Purpose: Unit tests validating Python tool scripts, NBT parsing, and pack generation.
+# ==============================================================================
 import gzip
 import json
 from pathlib import Path

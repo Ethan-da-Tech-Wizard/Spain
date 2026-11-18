@@ -1,3 +1,9 @@
+// ==============================================================================
+// Program: MinecraftChecks.java
+// Programmer: Ethan-da-Tech-Wizard
+// Last Modified: November 18, 2026
+// Purpose: Headless Java assertion suite verifying block registration and dimension state.
+// ==============================================================================
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

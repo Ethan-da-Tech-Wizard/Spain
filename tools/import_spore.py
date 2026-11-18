@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+
+# ==============================================================================
+# Program: import_spore.py
+# Programmer: Ethan-da-Tech-Wizard
+# Last Modified: November 18, 2026
+# Purpose: Importer converting Spore creature binary models into Minecraft voxel geometry.
+# ==============================================================================
 """Import selected Spore meshes via SporeModder FX, then remesh into Minecraft blocks."""
 import argparse,hashlib,json,math,os,subprocess,urllib.request,zipfile
 from pathlib import Path
