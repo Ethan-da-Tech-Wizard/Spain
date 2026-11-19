@@ -1,8 +1,15 @@
 [Desktop Entry]
+
+# Desktop launcher for the Linux application menu. It starts play-spain.sh, which launches the Spain instance in Prism Launcher
+# (run scripts/update.sh once first to install it). Freedesktop "Desktop Entry" format: keys below are read by the desktop environment.
 Type=Application
 Name=Play Spain
 Comment=Create a rocket and explore Earth, space and Starforge Station
+
+# %k expands to this file's own path, so `cd "$(dirname ...)"` enters the repository folder before running the script; without it play-spain.sh would not be found when launched from a menu.
 Exec=sh -c 'cd "$(dirname "%k")" && exec ./play-spain.sh'
 Icon=applications-games
+
+# No terminal window is opened; errors from the launcher are therefore not visible (run play-spain.sh in a terminal to debug).
 Terminal=false
 Categories=Game;

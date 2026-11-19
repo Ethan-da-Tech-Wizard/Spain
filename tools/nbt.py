@@ -26,6 +26,15 @@ Architecture & Protocol Notes:
    12 = TAG_Long_Array (length-prefixed array of 64-bit signed ints)
 - Supports optional gzip decompression/compression with deterministic timestamping (`mtime=0`).
 """
+
+# Used by: import_assets.py and import_spore.py (structure() writes .nbt files), install_prism.py (reads and
+# rewrites level.dat with typed=True, using payload() to write back), and verification/run_checks.py
+# (read() inspects the saved world's scoreboard). Tested in verification/test_tools.py.
+#
+# Two ways to hold a value: "plain" (read with typed=False) maps tags to ordinary Python values, which is
+# easiest for inspection; "typed" (typed=True) keeps every value as (tag_id, value) so a file can be read,
+# changed and written back without losing whether a number was a byte, short, int or long. payload() takes
+# that typed form. Limits: only what Minecraft files need (no streaming, no error recovery on corrupt files).
 from __future__ import annotations
 
 import gzip
@@ -60,6 +69,14 @@ def payload(kind: int, value) -> bytes:
     raise ValueError(f'Unsupported NBT write type {kind}')
 
 
+# (Docstring above is the summary.) Args:
+#     size: [x, y, z] extent of the structure in blocks.
+#     blocks: dict {(x, y, z): palette_index} of non-empty cells.
+#     palette: list of block names without the "minecraft:" prefix; indexes refer to this list.
+#     data_version: Minecraft's world data version number; 5023 matches the game version targeted by this
+#         project (26.3). Minecraft uses it to decide whether old data needs upgrading.
+# Returns:
+#     gzip-compressed bytes of a file Minecraft can load with `place template`.
 def structure(size, blocks, palette, data_version=5023) -> bytes:
     """Construct and gzip-compress a canonical Minecraft structure schematic file."""
     # Build standard Minecraft structure compound layout: DataVersion, size, palette, blocks, entities
@@ -69,7 +86,8 @@ def structure(size, blocks, palette, data_version=5023) -> bytes:
         'blocks': (9, (10, [{'pos': (9, (3, list(pos))), 'state': (3, state)} for pos, state in sorted(blocks.items())])),
         'entities': (9, (10, [])),
     }
-    # Compress with fixed mtime=0 to guarantee reproducible, bit-for-bit identical binary output
+    # The prefix is the root tag: type 10 (compound) and an empty name (two zero bytes for the length).
+    # mtime=0 removes the current time from the gzip header, so equal input always gives bit-for-bit equal bytes.
     return gzip.compress(b'\x0a\x00\x00' + payload(10, root), mtime=0)
 
 
@@ -80,6 +98,8 @@ def read(data: bytes, typed: bool = False):
     stream = io.BytesIO(data)
     
     # Internal helpers for sequential stream unpacking
+
+    # Read and unpack one big-endian value of struct format `fmt`.
     def get(fmt):
         return struct.unpack(fmt, stream.read(struct.calcsize(fmt)))[0]
     def text():
@@ -89,12 +109,15 @@ def read(data: bytes, typed: bool = False):
         if kind in formats: return get(formats[kind])
         if kind == 7: return list(stream.read(get('>i')))
         if kind == 8: return text()
+        # Lists remember their element type once, then store a count and the bare payloads. In typed mode the type is returned so the list can be written back.
         if kind == 9:
             subtype, count = get('>B'), get('>i')
             values = [decode(subtype) for _ in range(count)]
             return (subtype, values) if typed else values
         if kind == 10:
             result = {}
+
+            # A compound is read until its TAG_End (type 0); each entry is [type, name, payload].
             while (subtype := get('>B')) != 0:
                 name = text()
                 value = decode(subtype)
