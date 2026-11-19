@@ -3,10 +3,9 @@
 # Program: asset_status.py
 # Programmer: Ethan-da-Tech-Wizard
 # Last Modified: November 19, 2026
-# Purpose: Asset pipeline telemetry and manifest verification scanner.
-#          Inspects local Steam library depots, hashes raw 3D meshes, textures, and audio
-#          streams, and calculates pipeline completeness metrics against expected asset graphs.
-#          Guarantees linear O(N) filesystem scanning and non-blocking failure reporting.
+# Purpose: Reports whether the Steam games used as optional art sources (Spore and two
+#          others, by app id) are fully installed, and whether the locally generated asset
+#          files exist. Writes verification/output/asset-status.json.
 # ==============================================================================
 
 """Read Steam download manifests and check the local Minecraft/Spore build inputs."""

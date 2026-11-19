@@ -3,10 +3,8 @@
 # Program: setup_spore.py
 # Programmer: Ethan-da-Tech-Wizard
 # Last Modified: November 19, 2026
-# Purpose: External CLI toolchain provisioner and archive integrity validator.
-#          Downloads pinned SporeModder FX distributions over HTTPS, validates SHA-256
-#          cryptographic checksums, and safely extracts executable payloads without path traversal.
-#          Guarantees hermetic offline capability for subsequent asset import phases.
+# Purpose: Downloads the pinned SporeModder FX release, checks its SHA-256 against a hash
+#          recorded in this file and unpacks it under .tools/ so import_spore.py can run.
 # ==============================================================================
 
 """Install a pinned, verified SporeModder FX CLI locally; extracted art stays local."""

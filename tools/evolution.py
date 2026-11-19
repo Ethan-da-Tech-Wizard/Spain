@@ -2,10 +2,9 @@
 # Program: evolution.py
 # Programmer: Ethan-da-Tech-Wizard
 # Last Modified: November 19, 2026
-# Purpose: Deterministic population genetics simulator and evolutionary morphology engine.
-#          Models planetary creature trait distribution, genetic mutation probability matrices,
-#          and biological stat curves across successive generations within bounded memory space.
-#          Enforces immutable trait schemas and mathematical bounds on population variance.
+# Purpose: Prototype rules for how a creature population advances through stages (creature,
+#          tribe, city, space) from maturity, habitat, cooperation and knowledge values read
+#          from content/evolution.json. Not yet connected to the game.
 # ==============================================================================
 
 """Deterministic population progression prototype; not yet attached to Minecraft ticks."""

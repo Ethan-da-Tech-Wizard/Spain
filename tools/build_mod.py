@@ -3,10 +3,9 @@
 # Program: build_mod.py
 # Programmer: Ethan-da-Tech-Wizard
 # Last Modified: November 19, 2026
-# Purpose: Unmapped Fabric module compiler and JAR packaging manager for Minecraft 26.3.
-#          Coordinates local classpath discovery, executes headless javac compilation passes,
-#          injects fabric.mod.json metadata manifests, and outputs compressed distribution archives.
-#          Enforces deterministic JAR bytecode integrity via SHA-256 digest validation.
+# Purpose: Downloads (once, checksum-verified) the pinned Fabric loader and API jars, compiles
+#          the small Java mod in mod/src/main/java against the local Minecraft libraries with
+#          the bundled JDK 25, and zips the classes into dist/spain-flight-0.1.0.jar.
 # ==============================================================================
 
 """Compile the small, unmapped Minecraft 26.3 Fabric module against local game libraries."""

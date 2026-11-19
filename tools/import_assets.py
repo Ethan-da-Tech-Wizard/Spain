@@ -3,10 +3,9 @@
 # Program: import_assets.py
 # Programmer: Ethan-da-Tech-Wizard
 # Last Modified: November 19, 2026
-# Purpose: 3D GLB mesh voxelizer and Minecraft block palette quantization pipeline.
-#          Decodes binary glTF geometric buffer views, calculates axis-aligned bounding boxes (AABB),
-#          and projects 3D polygonal surface meshes onto discrete Minecraft voxel lattices.
-#          Maintains spatial memory bounds with linear O(V) voxel coordinate mapping.
+# Purpose: Converts local .glb 3D models (crate and pine) into vanilla Minecraft block
+#          structures (.nbt): reads the glTF mesh, samples every triangle into a voxel grid
+#          and picks the nearest block colour from a small palette.
 # ==============================================================================
 
 """Convert selected local Melty GLB art into ordinary, editable Minecraft blocks."""

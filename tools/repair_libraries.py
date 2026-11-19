@@ -3,10 +3,8 @@
 # Program: repair_libraries.py
 # Programmer: Ethan-da-Tech-Wizard
 # Last Modified: November 19, 2026
-# Purpose: Parallel native library resolver and classpath integrity restorer.
-#          Employs ThreadPoolExecutor workers to fetch missing GLFW/LWJGL platform binaries,
-#          validating cryptographic SHA-1 digests against Mojang/Prism version manifests.
-#          Enforces thread-safe network streaming and atomic local file replacement.
+# Purpose: Re-downloads any missing or corrupt Minecraft and Fabric library jars (Linux only)
+#          listed in Prism's metadata, checking each file's SHA-1, using 6 worker threads.
 # ==============================================================================
 
 """Fetch missing Linux client libraries using Prism's own version metadata and hashes."""

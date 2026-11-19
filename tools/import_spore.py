@@ -3,10 +3,10 @@
 # Program: import_spore.py
 # Programmer: Ethan-da-Tech-Wizard
 # Last Modified: November 19, 2026
-# Purpose: Procedural creature mesh decoder and voxel structure converter.
-#          Automates SporeModder FX CLI extraction pipelines, transforms skeletal mesh models
-#          into discrete voxel representation, and generates NBT schematic compound payloads.
-#          Enforces strict coordinate translation bounds and palette indexing invariants.
+# Purpose: Uses a locally installed SporeModder FX plus Spore's own game files to export
+#          three creature/rocket meshes, then converts each into a Minecraft block structure
+#          (.nbt) and a .voxels.json file the Java mod can render. Local only; nothing from
+#          Spore is committed.
 # ==============================================================================
 
 """Import selected Spore meshes via SporeModder FX, then remesh into Minecraft blocks."""

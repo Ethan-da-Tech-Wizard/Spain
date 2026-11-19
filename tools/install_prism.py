@@ -3,10 +3,10 @@
 # Program: install_prism.py
 # Programmer: Ethan-da-Tech-Wizard
 # Last Modified: November 19, 2026
-# Purpose: Automated instance orchestrator and deployment manager for Prism Launcher.
-#          Provisions isolated client profiles, patches JVM launch arguments for memory safety,
-#          symlinks custom Fabric mods and data packs, and verifies directory tree invariants.
-#          Guarantees idempotent setup across heterogeneous desktop operating systems.
+# Purpose: Installs the Spain game into its own Prism Launcher instance (named Spain): writes
+#          the instance config, adds Fabric, copies the mod and Fabric API jars, creates the
+#          starter world once from the verified test world and refreshes the data pack in it.
+#          Refuses to touch an instance it did not create.
 # ==============================================================================
 
 """Install the verified starter world in a separate, managed Prism instance."""
