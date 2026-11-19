@@ -1,9 +1,13 @@
 # ==============================================================================
 # Program: nbt.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Binary Named Binary Tag (NBT) parser and serializer for Minecraft schematics.
+# Last Modified: November 19, 2026
+# Purpose: High-performance binary Named Binary Tag (NBT) codec and tree serializer.
+#          Implements big-endian (IEEE 754 / network order) stream parsing for Minecraft
+#          schematic structures, entities, and world-state compounds. Enforces strict
+#          type-tag invariants, recursive payload validation, and deterministic gzip framing.
 # ==============================================================================
+
 """Small big-endian NBT codec for Minecraft structures and verification reports.
 
 Architecture & Protocol Notes:

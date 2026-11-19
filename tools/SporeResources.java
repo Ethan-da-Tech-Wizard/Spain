@@ -1,9 +1,12 @@
 // ==============================================================================
 // Program: SporeResources.java
 // Programmer: Ethan-da-Tech-Wizard
-// Last Modified: November 18, 2026
-// Purpose: Java resource loader unpacking internal procedural assets and palettes.
+// Last Modified: November 19, 2026
+// Purpose: Procedural asset extractor and binary palette decoder implemented in Java.
+//          Reads packaged Spore resource bundles from JAR stream archives, extracts diffuse textures,
+//          and converts color histograms into standardized Minecraft material identifier maps.
 // ==============================================================================
+
 import sporemodder.MainApp;
 import sporemodder.HashManager;
 import sporemodder.file.dbpf.*;

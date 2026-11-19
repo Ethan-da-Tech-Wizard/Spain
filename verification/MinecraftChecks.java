@@ -1,9 +1,12 @@
 // ==============================================================================
 // Program: MinecraftChecks.java
 // Programmer: Ethan-da-Tech-Wizard
-// Last Modified: November 18, 2026
-// Purpose: Headless Java assertion suite verifying block registration and dimension state.
+// Last Modified: November 19, 2026
+// Purpose: Mojang GameTest headless assertion suite validating mod registration contracts.
+//          Executes within the vanilla server runtime to programmatically assert block state registries,
+//          entity display spawning capabilities, and multi-dimensional coordinate bounds.
 // ==============================================================================
+
 import net.minecraft.SharedConstants;
 import net.minecraft.core.Registry;
 import net.minecraft.core.registries.BuiltInRegistries;

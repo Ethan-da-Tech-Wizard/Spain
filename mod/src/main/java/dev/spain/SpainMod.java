@@ -1,9 +1,12 @@
 // ==============================================================================
 // Program: SpainMod.java
 // Programmer: Ethan-da-Tech-Wizard
-// Last Modified: November 18, 2026
-// Purpose: Main Fabric mod initializer registering Starforge items, blocks, and events.
+// Last Modified: November 19, 2026
+// Purpose: Main Fabric server mod initializer registering flight subsystems, commands, and events.
+//          Wires lifecycle event handlers (server started, ticking, stopping), mounts custom /spain
+//          brigadier command trees, and coordinates network packet registries between client and server.
 // ==============================================================================
+
 package dev.spain;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;

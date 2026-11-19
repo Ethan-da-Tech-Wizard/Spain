@@ -1,9 +1,13 @@
 # ==============================================================================
 # Program: extend_pack.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Data pack expansion utility appending space exploration quests and dialogs.
+# Last Modified: November 19, 2026
+# Purpose: Space exploration questline compiler and dialogue graph expander.
+#          Augments planetary data packs with layered orbital space station missions,
+#          complex conditional dialogue nodes, and player trigger scoreboards. Enforces
+#          stateful interaction invariants across client-server network boundaries.
 # ==============================================================================
+
 """Earth-to-station test, layered over the colony content generator."""
 import json
 from pathlib import Path

@@ -1,9 +1,13 @@
 # ==============================================================================
 # Program: test_tools.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Unit tests validating Python tool scripts, NBT parsing, and pack generation.
+# Last Modified: November 19, 2026
+# Purpose: Automated unit test suite verifying data pack synthesis and NBT codecs.
+#          Exercises binary serialization roundtrips, validates big-endian integer packing,
+#          and asserts mathematical volume invariants on procedural voxel building generators.
+#          Runs hermetically under Python stdlib unittest with zero external dependencies.
 # ==============================================================================
+
 import gzip
 import json
 from pathlib import Path

@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-
 # ==============================================================================
 # Program: build_pack.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Procedural data pack synthesizer generating planetary functions and recipes.
-#          Constructs JSON structures for custom dimensions, biomes, and space loot.
+# Last Modified: November 19, 2026
+# Purpose: Procedural Minecraft data pack synthesizer generating planetary systems and quests.
+#          Compiles dimensional JSON definitions, biomes, dynamic dialog trees, and mcfunction
+#          scripts. Enforces mathematical volume bounds (<= 32,768 blocks per /fill invocation)
+#          and strict coordinate invariants for procedural planetary settlement generation.
 # ==============================================================================
+
 """Build a vanilla Minecraft 26.3 adventure from reviewable content and functions."""
 from __future__ import annotations
 

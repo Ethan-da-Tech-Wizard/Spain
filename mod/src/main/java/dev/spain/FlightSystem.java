@@ -1,9 +1,13 @@
 // ==============================================================================
 // Program: FlightSystem.java
 // Programmer: Ethan-da-Tech-Wizard
-// Last Modified: November 18, 2026
-// Purpose: 6-DOF spaceship physics simulation calculating thrust, drag, and gravity wells.
+// Last Modified: November 19, 2026
+// Purpose: 6-DOF spaceship physics simulation, multi-block assembly, and flight controller.
+//          Calculates continuous thrust vectors, aerodynamic drag, and planetary gravity wells.
+//          Synchronizes block display entities in client viewports while maintaining authoritative
+//          NBT persistent world state with strict thread safety and tick-aligned invariants.
 // ==============================================================================
+
 package dev.spain;
 
 import com.google.gson.*;

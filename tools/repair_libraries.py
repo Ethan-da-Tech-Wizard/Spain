@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-
 # ==============================================================================
 # Program: repair_libraries.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Native library and class path resolution utility for Minecraft runtime.
-#          Diagnoses and patches broken native bindings (LWJGL, GLFW) on target OS.
+# Last Modified: November 19, 2026
+# Purpose: Parallel native library resolver and classpath integrity restorer.
+#          Employs ThreadPoolExecutor workers to fetch missing GLFW/LWJGL platform binaries,
+#          validating cryptographic SHA-1 digests against Mojang/Prism version manifests.
+#          Enforces thread-safe network streaming and atomic local file replacement.
 # ==============================================================================
+
 """Fetch missing Linux client libraries using Prism's own version metadata and hashes."""
 import concurrent.futures,hashlib,json,urllib.request
 from pathlib import Path

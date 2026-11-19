@@ -1,9 +1,12 @@
 // ==============================================================================
 // Program: SporeVisuals.java
 // Programmer: Ethan-da-Tech-Wizard
-// Last Modified: November 18, 2026
-// Purpose: Client-side OpenGL shader and visual particle renderer for planetary orbits.
+// Last Modified: November 19, 2026
+// Purpose: Entity display visualizer and procedural alien avatar manager.
+//          Controls BlockDisplay entity hierarchies, computes quaternion rotation transformations,
+//          and maintains synchronized visual attachments for custom planetary creature avatars.
 // ==============================================================================
+
 package dev.spain;
 
 import com.google.gson.*;

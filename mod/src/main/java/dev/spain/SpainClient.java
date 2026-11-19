@@ -1,9 +1,13 @@
 // ==============================================================================
 // Program: SpainClient.java
 // Programmer: Ethan-da-Tech-Wizard
-// Last Modified: November 18, 2026
-// Purpose: Fabric client entry point initializing keybinds, HUD overlays, and renderers.
+// Last Modified: November 19, 2026
+// Purpose: Fabric client mod initializer governing keybinding input and camera perspective state.
+//          Registers custom payload receivers for FlightView packets, manages smooth camera
+//          transitions between first-person cockpit and third-person chase cameras, and restores
+//          client view settings upon disconnect or pilot dismount.
 // ==============================================================================
+
 package dev.spain;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.networking.v1.ClientPlayNetworking;

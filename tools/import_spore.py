@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-
 # ==============================================================================
 # Program: import_spore.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Importer converting Spore creature binary models into Minecraft voxel geometry.
+# Last Modified: November 19, 2026
+# Purpose: Procedural creature mesh decoder and voxel structure converter.
+#          Automates SporeModder FX CLI extraction pipelines, transforms skeletal mesh models
+#          into discrete voxel representation, and generates NBT schematic compound payloads.
+#          Enforces strict coordinate translation bounds and palette indexing invariants.
 # ==============================================================================
+
 """Import selected Spore meshes via SporeModder FX, then remesh into Minecraft blocks."""
 import argparse,hashlib,json,math,os,subprocess,urllib.request,zipfile
 from pathlib import Path

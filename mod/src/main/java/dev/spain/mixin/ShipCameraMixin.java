@@ -1,9 +1,12 @@
 // ==============================================================================
 // Program: ShipCameraMixin.java
 // Programmer: Ethan-da-Tech-Wizard
-// Last Modified: November 18, 2026
-// Purpose: Mixin intercepting vanilla camera transformations to support spaceship flight.
+// Last Modified: November 19, 2026
+// Purpose: Bytecode mixin transformer intercepting vanilla Minecraft camera zoom calculations.
+//          Modifies Camera.getMaxZoom via SpongePowered ASM injection at method entry to override
+//          view distances when spacecraft piloting mode is active, while preserving terrain clipping.
 // ==============================================================================
+
 package dev.spain.mixin;
 import dev.spain.SpainClient;
 import net.minecraft.client.Camera;

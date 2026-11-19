@@ -1,9 +1,12 @@
 // ==============================================================================
 // Program: FlightView.java
 // Programmer: Ethan-da-Tech-Wizard
-// Last Modified: November 18, 2026
-// Purpose: First-person and third-person spacecraft cockpit camera orientation handler.
+// Last Modified: November 19, 2026
+// Purpose: Custom network packet payload and binary codec for spacecraft camera synchronization.
+//          Implements Mojang CustomPacketPayload contract using RegistryFriendlyByteBuf stream codecs.
+//          Guarantees zero-allocation serialization of piloting state and third-person zoom distances.
 // ==============================================================================
+
 package dev.spain;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.RegistryFriendlyByteBuf;

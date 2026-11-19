@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-
 # ==============================================================================
 # Program: install_prism.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Automated Prism Launcher instance provisioning and mod deployment script.
+# Last Modified: November 19, 2026
+# Purpose: Automated instance orchestrator and deployment manager for Prism Launcher.
+#          Provisions isolated client profiles, patches JVM launch arguments for memory safety,
+#          symlinks custom Fabric mods and data packs, and verifies directory tree invariants.
+#          Guarantees idempotent setup across heterogeneous desktop operating systems.
 # ==============================================================================
+
 """Install the verified starter world in a separate, managed Prism instance."""
 from __future__ import annotations
 

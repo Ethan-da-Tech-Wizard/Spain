@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-
 # ==============================================================================
 # Program: run_checks.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Automated verification runner executing Minecraft check suites.
+# Last Modified: November 19, 2026
+# Purpose: Automated headless verification runner invoking Mojang GameTest server framework.
+#          Compiles test probes, launches headless server processes with strict timeout fences,
+#          and parses standard output streams to assert dimensional registration invariants.
+#          Reports structured error telemetry upon simulation failure or crash loops.
 # ==============================================================================
+
 """Compile a small probe against the user's Minecraft and run Mojang's GameTest server."""
 import json
 import os

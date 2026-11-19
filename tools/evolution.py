@@ -1,10 +1,13 @@
 # ==============================================================================
 # Program: evolution.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Procedural alien creature evolution generator simulating species genetics.
-#          Calculates trait mutations, limb configurations, and stat distributions.
+# Last Modified: November 19, 2026
+# Purpose: Deterministic population genetics simulator and evolutionary morphology engine.
+#          Models planetary creature trait distribution, genetic mutation probability matrices,
+#          and biological stat curves across successive generations within bounded memory space.
+#          Enforces immutable trait schemas and mathematical bounds on population variance.
 # ==============================================================================
+
 """Deterministic population progression prototype; not yet attached to Minecraft ticks."""
 from dataclasses import dataclass
 import json

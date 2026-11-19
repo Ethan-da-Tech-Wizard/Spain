@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-
 # ==============================================================================
 # Program: import_assets.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Texture and sprite batch converter processing raw PNG assets for game biomes.
+# Last Modified: November 19, 2026
+# Purpose: 3D GLB mesh voxelizer and Minecraft block palette quantization pipeline.
+#          Decodes binary glTF geometric buffer views, calculates axis-aligned bounding boxes (AABB),
+#          and projects 3D polygonal surface meshes onto discrete Minecraft voxel lattices.
+#          Maintains spatial memory bounds with linear O(V) voxel coordinate mapping.
 # ==============================================================================
+
 """Convert selected local Melty GLB art into ordinary, editable Minecraft blocks."""
 from __future__ import annotations
 

@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-
 # ==============================================================================
 # Program: build_mod.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Fabric mod build manager orchestrating resource packing and JAR signing.
+# Last Modified: November 19, 2026
+# Purpose: Unmapped Fabric module compiler and JAR packaging manager for Minecraft 26.3.
+#          Coordinates local classpath discovery, executes headless javac compilation passes,
+#          injects fabric.mod.json metadata manifests, and outputs compressed distribution archives.
+#          Enforces deterministic JAR bytecode integrity via SHA-256 digest validation.
 # ==============================================================================
+
 """Compile the small, unmapped Minecraft 26.3 Fabric module against local game libraries."""
 import os, subprocess, zipfile, urllib.request, hashlib
 from pathlib import Path

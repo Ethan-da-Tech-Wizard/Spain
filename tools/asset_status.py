@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-
 # ==============================================================================
 # Program: asset_status.py
 # Programmer: Ethan-da-Tech-Wizard
-# Last Modified: November 18, 2026
-# Purpose: Asset pipeline status reporter inspecting 3D models, textures, and sounds.
-#          Calculates asset manifest completeness and flags missing resource files.
+# Last Modified: November 19, 2026
+# Purpose: Asset pipeline telemetry and manifest verification scanner.
+#          Inspects local Steam library depots, hashes raw 3D meshes, textures, and audio
+#          streams, and calculates pipeline completeness metrics against expected asset graphs.
+#          Guarantees linear O(N) filesystem scanning and non-blocking failure reporting.
 # ==============================================================================
+
 """Read Steam download manifests and check the local Minecraft/Spore build inputs."""
 import json,re
 from pathlib import Path
